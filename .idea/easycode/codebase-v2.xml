@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="com.obiscr.chatgpt.settings.EasyCodeState">
+    <option name="projectFiles" value="$PROJECT_DIR$/src/main/java/dev/juviscript/compassmeridian/model/KeyMapping.java;C:/Users/Juvi/Documents/repositories/compass-meridian/compass-meridian/src/main/java/dev/juviscript/compassmeridian/model/Preset.java;C:/Users/Juvi/Documents/repositories/compass-meridian/compass-meridian/src/main/java/dev/juviscript/compassmeridian/serial/CompassProtocol.java;C:/Users/Juvi/Documents/repositories/compass-meridian/compass-meridian/src/main/java/dev/juviscript/compassmeridian/serial/CompassSerial.java;C:/Users/Juvi/Documents/repositories/compass-meridian/compass-meridian/src/main/java/dev/juviscript/compassmeridian/MainController.java;C:/Users/Juvi/Documents/repositories/compass-meridian/compass-meridian/src/main/java/dev/juviscript/compassmeridian/MeridianApp.java;C:/Users/Juvi/Documents/repositories/compass-meridian/compass-meridian/src/main/java/module-info.java;C:/Users/Juvi/Documents/repositories/compass-meridian/compass-meridian/src/main/resources/dev/juviscript/compassmeridian/styles.css;C:/Users/Juvi/Documents/repositories/compass-meridian/compass-meridian/README.md" />
+  </component>
+</project>

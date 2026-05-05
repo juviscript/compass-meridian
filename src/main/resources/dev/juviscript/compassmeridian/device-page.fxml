@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="dev.juviscript.compassmeridian.controllers.DeviceController"
+      spacing="16">
+
+    <!-- Hero card -->
+    <HBox styleClass="card" spacing="24" alignment="CENTER_LEFT">
+        <!-- Placeholder image -->
+        <ImageView fx:id="deviceImage" fitWidth="160" fitHeight="120"
+                   preserveRatio="true"/>
+
+        <VBox spacing="8" HBox.hgrow="ALWAYS">
+            <Label text="KLUTCH GAMING COMPASS" styleClass="card-title"/>
+            <Label fx:id="deviceName" text="Compass" styleClass="text-primary"
+                   style="-fx-font-size: 22px; -fx-font-weight: bold;"/>
+
+            <HBox spacing="8" alignment="CENTER_LEFT">
+                <Label fx:id="connDot" text="●" styleClass="status-dot-disconnected"/>
+                <Label fx:id="connLabel" text="Disconnected" styleClass="text-secondary"/>
+            </HBox>
+
+            <Separator/>
+
+            <HBox spacing="24">
+                <VBox spacing="2">
+                    <Label text="FIRMWARE" styleClass="text-secondary"
+                           style="-fx-font-size: 9px; -fx-letter-spacing: 1px;"/>
+                    <Label fx:id="firmwareLabel" text="—" styleClass="text-primary"/>
+                </VBox>
+                <VBox spacing="2">
+                    <Label text="HW REV" styleClass="text-secondary"
+                           style="-fx-font-size: 9px; -fx-letter-spacing: 1px;"/>
+                    <Label fx:id="hwRevLabel" text="—" styleClass="text-primary"/>
+                </VBox>
+                <VBox spacing="2">
+                    <Label text="PORT" styleClass="text-secondary"
+                           style="-fx-font-size: 9px; -fx-letter-spacing: 1px;"/>
+                    <Label fx:id="portLabel" text="—" styleClass="text-primary"/>
+                </VBox>
+            </HBox>
+        </VBox>
+    </HBox>
+
+    <!-- Device info card -->
+    <VBox styleClass="card" spacing="12">
+        <Label text="DEVICE INFO" styleClass="card-title"/>
+
+        <GridPane hgap="16" vgap="8">
+            <columnConstraints>
+                <ColumnConstraints minWidth="120"/>
+                <ColumnConstraints hgrow="ALWAYS"/>
+            </columnConstraints>
+
+            <Label text="Device ID" styleClass="text-secondary"
+                   GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+            <Label text="compass-rp2040" styleClass="text-primary"
+                   GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+            <Label text="Manufacturer" styleClass="text-secondary"
+                   GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+            <Label text="Klutch Gaming" styleClass="text-primary"
+                   GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+            <Label text="Build Date" styleClass="text-secondary"
+                   GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+            <Label fx:id="buildDateLabel" text="—" styleClass="text-primary"
+                   GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+        </GridPane>
+    </VBox>
+
+    <!-- Firmware card -->
+    <VBox styleClass="card" spacing="12">
+        <Label text="FIRMWARE" styleClass="card-title"/>
+        <HBox alignment="CENTER_LEFT" spacing="16">
+            <VBox spacing="2">
+                <Label text="INSTALLED" styleClass="text-secondary"
+                       style="-fx-font-size: 9px;"/>
+                <Label fx:id="installedVersion" text="—" styleClass="text-primary"/>
+            </VBox>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button text="Check for Updates" styleClass="btn-secondary"
+                    onAction="#onCheckUpdates"/>
+        </HBox>
+    </VBox>
+
+</VBox>

@@ -1,0 +1,302 @@
+/* ── Root ────────────────────────────────────────────────── */
+.root {
+    -fx-background-color: #0a0a0a;
+    -fx-font-family: "Segoe UI";
+    -fx-font-size: 14px;
+}
+
+/* ── Titlebar ─────────────────────────────────────────────── */
+.titlebar {
+    -fx-background-color: #0d0d0d;
+    -fx-pref-height: 36px;
+    -fx-border-color: #1a0000;
+    -fx-border-width: 0 0 1 0;
+}
+
+.titlebar-title {
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-letter-spacing: 3px;
+    -fx-padding: 0 0 0 10px;
+}
+
+.window-controls {
+    -fx-pref-height: 36px;
+}
+
+.btn-minimize, .btn-maximize {
+    -fx-background-color: transparent;
+    -fx-text-fill: #888888;
+    -fx-font-size: 13px;
+    -fx-pref-width: 46px;
+    -fx-pref-height: 36px;
+    -fx-background-radius: 0;
+    -fx-cursor: hand;
+    -fx-border-width: 0;
+}
+
+.btn-minimize:hover, .btn-maximize:hover {
+    -fx-background-color: #2a2a2a;
+    -fx-text-fill: #ffffff;
+}
+
+.btn-close {
+    -fx-background-color: transparent;
+    -fx-text-fill: #888888;
+    -fx-font-size: 13px;
+    -fx-pref-width: 46px;
+    -fx-pref-height: 36px;
+    -fx-background-radius: 0;
+    -fx-cursor: hand;
+    -fx-border-width: 0;
+}
+
+.btn-close:hover {
+    -fx-background-color: #cc0000;
+    -fx-text-fill: #ffffff;
+}
+
+/* ── Sidebar ──────────────────────────────────────────────── */
+.sidebar {
+    -fx-background-color: #0d0d0d;
+    -fx-border-color: #1a0000;
+    -fx-border-width: 0 1 0 0;
+}
+
+.sidebar-brand {
+    -fx-padding: 0 16 0 16;
+}
+
+.brand-label {
+    -fx-text-fill: #cc0000;
+    -fx-font-size: 9px;
+    -fx-font-weight: bold;
+    -fx-letter-spacing: 2px;
+    -fx-padding: 6 0 0 0;
+}
+
+/* ── Nav items ────────────────────────────────────────────── */
+.nav-item {
+    -fx-background-color: transparent;
+    -fx-background-radius: 6px;
+    -fx-cursor: hand;
+    -fx-alignment: CENTER_LEFT;
+    -fx-spacing: 4;
+}
+
+.nav-item:hover {
+    -fx-background-color: #1a0000;
+}
+
+.nav-item-active {
+    -fx-background-color: #1a0000;
+    -fx-border-color: #cc0000;
+    -fx-border-width: 0 0 0 3;
+    -fx-border-radius: 0;
+    -fx-background-radius: 0 6 6 0;
+}
+
+.nav-icon {
+    -fx-text-fill: #666666;
+    -fx-font-size: 16px;
+}
+
+.nav-item-active .nav-icon {
+    -fx-text-fill: #cc0000;
+}
+
+.nav-label {
+    -fx-text-fill: #888888;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-letter-spacing: 1px;
+}
+
+.nav-item-active .nav-label {
+    -fx-text-fill: #ffffff;
+}
+
+/* ── Sidebar status ───────────────────────────────────────── */
+.sidebar-status {
+    -fx-spacing: 8;
+}
+
+.status-dot-connected {
+    -fx-text-fill: #00e676;
+    -fx-font-size: 10px;
+}
+
+.status-dot-disconnected {
+    -fx-text-fill: #444444;
+    -fx-font-size: 10px;
+}
+
+.status-text {
+    -fx-text-fill: #666666;
+    -fx-font-size: 11px;
+}
+
+.btn-connect {
+    -fx-background-color: #cc0000;
+    -fx-text-fill: #ffffff;
+    -fx-font-weight: bold;
+    -fx-font-size: 11px;
+    -fx-background-radius: 6px;
+    -fx-padding: 8 0 8 0;
+    -fx-cursor: hand;
+    -fx-margin: 8 0 0 0;
+}
+
+.btn-connect:hover {
+    -fx-background-color: #ff0000;
+}
+
+/* ── Content area ─────────────────────────────────────────── */
+.content-area {
+    -fx-background-color: #111111;
+    -fx-padding: 24;
+}
+
+/* ── Cards ───────────────────────────────────────────────── */
+.card {
+    -fx-background-color: #161616;
+    -fx-background-radius: 8px;
+    -fx-border-color: #1f1f1f;
+    -fx-border-radius: 8px;
+    -fx-border-width: 1px;
+    -fx-padding: 20px;
+}
+
+.card-title {
+    -fx-text-fill: #cc0000;
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+    -fx-letter-spacing: 2px;
+}
+
+/* ── Typography ───────────────────────────────────────────── */
+.text-primary {
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 13px;
+}
+
+.text-secondary {
+    -fx-text-fill: #666666;
+    -fx-font-size: 11px;
+}
+
+.text-accent {
+    -fx-text-fill: #cc0000;
+}
+
+/* ── Buttons ──────────────────────────────────────────────── */
+.btn-primary {
+    -fx-background-color: #cc0000;
+    -fx-text-fill: #ffffff;
+    -fx-font-weight: bold;
+    -fx-font-size: 11px;
+    -fx-background-radius: 6px;
+    -fx-padding: 8 20 8 20;
+    -fx-cursor: hand;
+}
+
+.btn-primary:hover {
+    -fx-background-color: #ff0000;
+}
+
+.btn-primary:disabled {
+    -fx-background-color: #1f1f1f;
+    -fx-text-fill: #444444;
+}
+
+.btn-secondary {
+    -fx-background-color: #1f1f1f;
+    -fx-text-fill: #888888;
+    -fx-font-size: 11px;
+    -fx-background-radius: 6px;
+    -fx-padding: 8 20 8 20;
+    -fx-cursor: hand;
+    -fx-border-color: #2a2a2a;
+    -fx-border-radius: 6px;
+    -fx-border-width: 1px;
+}
+
+.btn-secondary:hover {
+    -fx-background-color: #2a2a2a;
+    -fx-text-fill: #ffffff;
+}
+
+.btn-preset {
+    -fx-background-color: transparent;
+    -fx-text-fill: #cc0000;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 6px;
+    -fx-padding: 6 14 6 14;
+    -fx-border-color: #cc0000;
+    -fx-border-radius: 6px;
+    -fx-border-width: 1px;
+    -fx-cursor: hand;
+}
+
+.btn-preset:hover {
+    -fx-background-color: #cc0000;
+    -fx-text-fill: #ffffff;
+}
+
+/* ── ComboBox ─────────────────────────────────────────────── */
+.combo-box {
+    -fx-background-color: #1f1f1f;
+    -fx-border-color: #2a2a2a;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+}
+
+.combo-box .list-cell {
+    -fx-text-fill: #ffffff;
+    -fx-background-color: #1f1f1f;
+}
+
+.combo-box-popup .list-view {
+    -fx-background-color: #1f1f1f;
+    -fx-border-color: #2a2a2a;
+}
+
+.combo-box-popup .list-cell:hover {
+    -fx-background-color: #2a2a2a;
+}
+
+.combo-box-popup .list-cell:selected {
+    -fx-background-color: #cc0000;
+    -fx-text-fill: #ffffff;
+}
+
+/* ── Separator ────────────────────────────────────────────── */
+.separator .line {
+    -fx-border-color: #1f1f1f;
+}
+
+.titlebar-title {
+    -fx-font-size: 13px;
+    -fx-font-family: "Consolas";
+    -fx-letter-spacing: 4px;
+}
+
+.brand-label {
+    -fx-font-family: "Consolas";
+    -fx-font-size: 10px;
+}
+
+.card-title {
+    -fx-font-family: "Consolas";
+    -fx-font-size: 11px;
+}
+
+.nav-label {
+    -fx-font-size: 12px;
+}
+
+.text-primary {
+    -fx-font-size: 14px;
+}

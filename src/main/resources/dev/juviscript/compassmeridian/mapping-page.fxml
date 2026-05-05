@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="dev.juviscript.compassmeridian.controllers.MappingController"
+      spacing="16">
+
+    <!-- Presets -->
+    <VBox styleClass="card" spacing="12">
+        <Label text="PRESETS" styleClass="card-title"/>
+        <HBox spacing="8">
+            <Button text="WASD" onAction="#onPresetWASD" styleClass="btn-preset"/>
+            <Button text="Arrow Keys" onAction="#onPresetArrows" styleClass="btn-preset"/>
+            <Button text="IJKL" onAction="#onPresetIJKL" styleClass="btn-preset"/>
+        </HBox>
+    </VBox>
+
+    <!-- Key mapping -->
+    <VBox styleClass="card" spacing="16">
+        <Label text="KEY MAPPING" styleClass="card-title"/>
+
+        <GridPane hgap="16" vgap="12">
+            <columnConstraints>
+                <ColumnConstraints minWidth="100"/>
+                <ColumnConstraints hgrow="ALWAYS"/>
+            </columnConstraints>
+
+            <Label text="Up" styleClass="text-primary"
+                   GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+            <ComboBox fx:id="upCombo" GridPane.rowIndex="0" GridPane.columnIndex="1"
+                      maxWidth="Infinity" onAction="#onMappingChanged"/>
+
+            <Label text="Down" styleClass="text-primary"
+                   GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+            <ComboBox fx:id="downCombo" GridPane.rowIndex="1" GridPane.columnIndex="1"
+                      maxWidth="Infinity" onAction="#onMappingChanged"/>
+
+            <Label text="Left" styleClass="text-primary"
+                   GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+            <ComboBox fx:id="leftCombo" GridPane.rowIndex="2" GridPane.columnIndex="1"
+                      maxWidth="Infinity" onAction="#onMappingChanged"/>
+
+            <Label text="Right" styleClass="text-primary"
+                   GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+            <ComboBox fx:id="rightCombo" GridPane.rowIndex="3" GridPane.columnIndex="1"
+                      maxWidth="Infinity" onAction="#onMappingChanged"/>
+        </GridPane>
+
+        <HBox spacing="8" alignment="CENTER_RIGHT">
+            <Button fx:id="resetButton" text="Reset to WASD"
+                    onAction="#onResetClicked" styleClass="btn-secondary"/>
+            <Button fx:id="saveButton" text="Save to Device"
+                    onAction="#onSaveClicked" styleClass="btn-primary"/>
+        </HBox>
+    </VBox>
+
+</VBox>
