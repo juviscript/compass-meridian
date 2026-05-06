@@ -9,4 +9,5 @@ module dev.juviscript.compassmeridian {
     opens dev.juviscript.compassmeridian.controllers to javafx.fxml;
     exports dev.juviscript.compassmeridian;
     exports dev.juviscript.compassmeridian.controllers;
+    exports dev.juviscript.compassmeridian.utils;
 }

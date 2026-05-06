@@ -1,24 +1,93 @@
 /* ── Root ────────────────────────────────────────────────── */
 .root {
-    -fx-background-color: #0a0a0a;
-    -fx-font-family: "Segoe UI";
-    -fx-font-size: 14px;
+    bg-primary: #0a0a0a;
+    bg-card: #000000;
+}
+
+/* ── Montserrat Font Face ─────────────────────────────────── */
+@font-face {
+    font-family: "Montserrat";
+    font-weight: 100;
+    src: url("/dev/juviscript/compassmeridian/assets/fonts/Montserrat-Thin.ttf");
+}
+
+@font-face {
+    font-family: "Montserrat";
+    font-weight: 200;
+    src: url("/dev/juviscript/compassmeridian/assets/fonts/Montserrat-ExtraLight.ttf");
+}
+
+@font-face {
+    font-family: "Montserrat";
+    font-weight: 300;
+    src: url("/dev/juviscript/compassmeridian/assets/fonts/Montserrat-Light.ttf");
+}
+
+@font-face {
+    font-family: "Montserrat";
+    font-weight: 400;
+    src: url("/dev/juviscript/compassmeridian/assets/fonts/Montserrat-Regular.ttf");
+}
+
+@font-face {
+    font-family: "Montserrat";
+    font-weight: 500;
+    src: url("/dev/juviscript/compassmeridian/assets/fonts/Montserrat-Medium.ttf");
+}
+
+@font-face {
+    font-family: "Montserrat";
+    font-weight: 600;
+    src: url("/dev/juviscript/compassmeridian/assets/fonts/Montserrat-SemiBold.ttf");
+}
+
+@font-face {
+    font-family: "Montserrat";
+    font-weight: 700;
+    src: url("/dev/juviscript/compassmeridian/assets/fonts/Montserrat-Bold.ttf");
+}
+
+@font-face {
+    font-family: "Montserrat";
+    font-weight: 800;
+    src: url("/dev/juviscript/compassmeridian/assets/fonts/Montserrat-ExtraBold.ttf");
+}
+
+@font-face {
+    font-family: "Montserrat";
+    font-weight: 900;
+    src: url("/dev/juviscript/compassmeridian/assets/fonts/Montserrat-Black.ttf");
+}
+
+@font-face {
+    font-family: "Montserrat";
+    font-weight: 400;
+    font-style: italic;
+    src: url("/dev/juviscript/compassmeridian/assets/fonts/Montserrat-Italic.ttf");
+}
+
+@font-face {
+    font-family: "Montserrat";
+    font-weight: 700;
+    font-style: italic;
+    src: url("/dev/juviscript/compassmeridian/assets/fonts/Montserrat-BoldItalic.ttf");
 }
 
 /* ── Titlebar ─────────────────────────────────────────────── */
-.titlebar {
-    -fx-background-color: #0d0d0d;
+.title-bar {
+    -fx-background-color: bg-card;
     -fx-pref-height: 36px;
-    -fx-border-color: #1a0000;
     -fx-border-width: 0 0 1 0;
+    -fx-padding: 0 0 0 16;
 }
 
-.titlebar-title {
+.title-bar-title {
     -fx-text-fill: #ffffff;
+    -fx-font-family: "Montserrat";
     -fx-font-size: 11px;
     -fx-font-weight: bold;
-    -fx-letter-spacing: 3px;
-    -fx-padding: 0 0 0 10px;
+    -fx-letter-spacing: 4px;
+    -fx-padding: 0 0 0 8;
 }
 
 .window-controls {
@@ -59,30 +128,38 @@
 
 /* ── Sidebar ──────────────────────────────────────────────── */
 .sidebar {
-    -fx-background-color: #0d0d0d;
-    -fx-border-color: #1a0000;
-    -fx-border-width: 0 1 0 0;
+    -fx-background-color: #0a0a0a;
+    -fx-padding: 16 8 16 16;
 }
 
-.sidebar-brand {
-    -fx-padding: 0 16 0 16;
+.sidebar-inner {
+    -fx-background-color: bg-card;
+    -fx-background-radius: 12px;
+    -fx-border-radius: 12px;
+    -fx-border-width: 1px;
+    -fx-padding: 24 0 24 0;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 12, 0, 0, 4);
+}
+
+.sidebar-logo {
+    -fx-padding: 0 0 24 0;
 }
 
 .brand-label {
     -fx-text-fill: #cc0000;
+    -fx-font-family: "Montserrat";
     -fx-font-size: 9px;
-    -fx-font-weight: bold;
+    -fx-font-weight: 700;
     -fx-letter-spacing: 2px;
-    -fx-padding: 6 0 0 0;
+    -fx-padding: 8 0 0 0;
 }
 
 /* ── Nav items ────────────────────────────────────────────── */
 .nav-item {
     -fx-background-color: transparent;
-    -fx-background-radius: 6px;
     -fx-cursor: hand;
-    -fx-alignment: CENTER_LEFT;
-    -fx-spacing: 4;
+    -fx-alignment: CENTER;
+    -fx-padding: 12 0 12 0;
 }
 
 .nav-item:hover {
@@ -93,92 +170,58 @@
     -fx-background-color: #1a0000;
     -fx-border-color: #cc0000;
     -fx-border-width: 0 0 0 3;
-    -fx-border-radius: 0;
-    -fx-background-radius: 0 6 6 0;
+    -fx-text-fill: #cc0000;
 }
 
 .nav-icon {
     -fx-text-fill: #666666;
-    -fx-font-size: 16px;
+    -fx-font-size: 20px;
+    -fx-padding: 0 0 2 0;
 }
 
 .nav-item-active .nav-icon {
     -fx-text-fill: #cc0000;
 }
 
-.nav-label {
+.nav-item .nav-label {
     -fx-text-fill: #888888;
-    -fx-font-size: 11px;
-    -fx-font-weight: bold;
+    -fx-font-family: "Montserrat";
+    -fx-font-size: 9px;
+    -fx-font-weight: 800;
     -fx-letter-spacing: 1px;
 }
 
 .nav-item-active .nav-label {
-    -fx-text-fill: #ffffff;
-}
-
-/* ── Sidebar status ───────────────────────────────────────── */
-.sidebar-status {
-    -fx-spacing: 8;
-}
-
-.status-dot-connected {
-    -fx-text-fill: #00e676;
-    -fx-font-size: 10px;
-}
-
-.status-dot-disconnected {
-    -fx-text-fill: #444444;
-    -fx-font-size: 10px;
-}
-
-.status-text {
-    -fx-text-fill: #666666;
-    -fx-font-size: 11px;
-}
-
-.btn-connect {
-    -fx-background-color: #cc0000;
-    -fx-text-fill: #ffffff;
-    -fx-font-weight: bold;
-    -fx-font-size: 11px;
-    -fx-background-radius: 6px;
-    -fx-padding: 8 0 8 0;
-    -fx-cursor: hand;
-    -fx-margin: 8 0 0 0;
-}
-
-.btn-connect:hover {
-    -fx-background-color: #ff0000;
+     -fx-text-fill: #cc0000;
 }
 
 /* ── Content area ─────────────────────────────────────────── */
 .content-area {
-    -fx-background-color: #111111;
-    -fx-padding: 24;
+    -fx-background-color: bg-primary;
+    -fx-padding: 16 16 16 8;
 }
 
 /* ── Cards ───────────────────────────────────────────────── */
 .card {
-    -fx-background-color: #161616;
+    -fx-background-color: bg-card;
     -fx-background-radius: 8px;
-    -fx-border-color: #1f1f1f;
     -fx-border-radius: 8px;
-    -fx-border-width: 1px;
-    -fx-padding: 20px;
+    -fx-padding: 24;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 12, 0, 0, 4);
 }
 
 .card-title {
     -fx-text-fill: #cc0000;
+    -fx-font-family: "Montserrat";
     -fx-font-size: 10px;
-    -fx-font-weight: bold;
-    -fx-letter-spacing: 2px;
+    -fx-font-weight: 700;
+    -fx-letter-spacing: 3px;
 }
 
 /* ── Typography ───────────────────────────────────────────── */
 .text-primary {
     -fx-text-fill: #ffffff;
-    -fx-font-size: 13px;
+    -fx-font-size: 14px;
 }
 
 .text-secondary {
@@ -194,10 +237,11 @@
 .btn-primary {
     -fx-background-color: #cc0000;
     -fx-text-fill: #ffffff;
-    -fx-font-weight: bold;
+    -fx-font-family: "Montserrat";
+    -fx-font-weight: 700;
     -fx-font-size: 11px;
     -fx-background-radius: 6px;
-    -fx-padding: 8 20 8 20;
+    -fx-padding: 8 16 8 16;
     -fx-cursor: hand;
 }
 
@@ -213,13 +257,15 @@
 .btn-secondary {
     -fx-background-color: #1f1f1f;
     -fx-text-fill: #888888;
+    -fx-font-family: "Montserrat";
     -fx-font-size: 11px;
     -fx-background-radius: 6px;
-    -fx-padding: 8 20 8 20;
+    -fx-padding: 8 16 8 16;
     -fx-cursor: hand;
     -fx-border-color: #2a2a2a;
     -fx-border-radius: 6px;
     -fx-border-width: 1px;
+    -fx-font-weight: 700;
 }
 
 .btn-secondary:hover {
@@ -230,10 +276,11 @@
 .btn-preset {
     -fx-background-color: transparent;
     -fx-text-fill: #cc0000;
+    -fx-font-family: "Montserrat";
     -fx-font-size: 11px;
-    -fx-font-weight: bold;
+    -fx-font-weight: 700;
     -fx-background-radius: 6px;
-    -fx-padding: 6 14 6 14;
+    -fx-padding: 8 16 8 16;
     -fx-border-color: #cc0000;
     -fx-border-radius: 6px;
     -fx-border-width: 1px;
@@ -243,6 +290,43 @@
 .btn-preset:hover {
     -fx-background-color: #cc0000;
     -fx-text-fill: #ffffff;
+}
+
+
+
+/* ── Badges ───────────────────────────────────────────────── */
+.badge {
+    -fx-background-color: #2a2a2a;
+    -fx-text-fill: #888888;
+    -fx-font-family: "Montserrat";
+    -fx-font-size: 8px;
+    -fx-font-weight: 700;
+    -fx-padding: 4 8 4 8;
+    -fx-background-radius: 20px;
+    -fx-letter-spacing: 2px;
+}
+
+.badge-red {
+    -fx-background-color: #2a0000;
+    -fx-text-fill: #cc0000;
+}
+
+.badge-red .label {
+    -fx-text-fill: #cc0000;
+}
+
+.badge-green .label {
+    -fx-text-fill: #00e676;
+}
+
+.badge-green {
+    -fx-background-color: #002a00;
+    -fx-text-fill: #00e676;
+}
+
+.badge-yellow {
+    -fx-background-color: #2a2000;
+    -fx-text-fill: #ffd600;
 }
 
 /* ── ComboBox ─────────────────────────────────────────────── */
@@ -277,26 +361,74 @@
     -fx-border-color: #1f1f1f;
 }
 
-.titlebar-title {
-    -fx-font-size: 13px;
-    -fx-font-family: "Consolas";
-    -fx-letter-spacing: 4px;
+/* ── Device page ──────────────────────────────────────────── */
+.device-image-container {
+    -fx-background-color: radial-gradient(center 50% 50%, radius 60%,
+        #cc000066 0%,
+        #cc000033 40%,
+        transparent 70%);
+    -fx-background-radius: 50%;
+    -fx-min-width: 200px;
+    -fx-min-height: 200px;
+    -fx-max-width: 200px;
+    -fx-max-height: 200px;
 }
 
-.brand-label {
-    -fx-font-family: "Consolas";
-    -fx-font-size: 10px;
+.hero-card-header {
+    -fx-padding: 24 0 0 0;
 }
 
-.card-title {
-    -fx-font-family: "Consolas";
+.device-name {
+    -fx-text-fill: #ffffff;
+    -fx-font-family: "Montserrat";
+    -fx-font-size: 24px;
+    -fx-font-weight: 700;
+}
+
+.stats-container {
+    -fx-padding: 24 0 0 0;
+}
+
+.stat-card {
+    -fx-background-color: bg-card;
+    -fx-background-radius: 8px;
+    -fx-border-color: #1f1f1f;
+    -fx-border-radius: 8px;
+    -fx-border-width: 1px;
+    -fx-padding: 16 24 16 24;
+}
+
+.stat-label {
+    -fx-text-fill: #888888;
+    -fx-font-family: "Montserrat";
     -fx-font-size: 11px;
 }
 
-.nav-label {
-    -fx-font-size: 12px;
+.value {
+    -fx-text-fill: #ffffff;
+    -fx-font-family: "Montserrat";
+    -fx-font-size: 13px;
 }
 
-.text-primary {
-    -fx-font-size: 14px;
+.value-lg {
+    -fx-text-fill: #ffffff;
+    -fx-font-family: "Montserrat";
+    -fx-font-size: 18px;
+    -fx-font-weight: 700;
+}
+
+/* ── Status dots ──────────────────────────────────────────── */
+.status-dot-connected {
+    -fx-text-fill: #00e676;
+    -fx-font-size: 10px;
+}
+
+.status-dot-disconnected {
+    -fx-text-fill: #444444;
+    -fx-font-size: 10px;
+}
+
+.status-text {
+    -fx-text-fill: #666666;
+    -fx-font-size: 11px;
 }

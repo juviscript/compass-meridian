@@ -15,17 +15,14 @@
 
     <!-- Custom Titlebar -->
     <top>
-        <HBox styleClass="titlebar" alignment="CENTER_LEFT"
+        <HBox styleClass="title-bar" alignment="CENTER_LEFT"
               onMousePressed="#onTitlebarPressed"
               onMouseDragged="#onTitlebarDragged">
-            <padding>
-                <Insets top="0" right="0" bottom="0" left="16"/>
-            </padding>
 
             <ImageView fx:id="appIcon" fitWidth="20" fitHeight="20"
                        preserveRatio="true"/>
 
-            <Label text="MERIDIAN" styleClass="titlebar-title"/>
+            <Label text="Klutch Gaming — Meridian" styleClass="title-bar-title"/>
 
             <Region HBox.hgrow="ALWAYS"/>
 
@@ -43,62 +40,35 @@
 
     <!-- Sidebar -->
     <left>
-        <VBox styleClass="sidebar" prefWidth="180">
-            <padding>
-                <Insets top="24" right="0" bottom="24" left="0"/>
-            </padding>
-
-            <!-- Brand -->
-            <VBox styleClass="sidebar-brand" alignment="CENTER">
-                <padding>
-                    <Insets bottom="32"/>
-                </padding>
-                <ImageView fx:id="brandIcon" fitWidth="40" fitHeight="40"
-                           preserveRatio="true"/>
-                <Label text="KLUTCH GAMING" styleClass="brand-label"/>
-            </VBox>
-
-            <!-- Nav items -->
-            <VBox fx:id="navContainer" spacing="4">
-                <padding>
-                    <Insets left="12" right="12"/>
-                </padding>
-
-                <VBox fx:id="navDevice" styleClass="nav-item" onMouseClicked="#onNavDevice">
-                    <padding><Insets top="12" right="16" bottom="12" left="16"/></padding>
-                    <Label text="⬡" styleClass="nav-icon"/>
-                    <Label text="Device" styleClass="nav-label"/>
+        <VBox styleClass="sidebar" prefWidth="125" spacing="4">
+            <VBox styleClass="sidebar-inner" VBox.vgrow="ALWAYS" maxHeight="Infinity">
+                <!-- Logo -->
+                <VBox styleClass="sidebar-logo" alignment="CENTER">
+                    <ImageView fx:id="brandIcon" fitWidth="65" fitHeight="65"
+                               preserveRatio="true"/>
                 </VBox>
 
-                <VBox fx:id="navMapping" styleClass="nav-item" onMouseClicked="#onNavMapping">
-                    <padding><Insets top="12" right="16" bottom="12" left="16"/></padding>
-                    <Label text="⌨" styleClass="nav-icon"/>
-                    <Label text="Mapping" styleClass="nav-label"/>
-                </VBox>
+                <!-- Nav items -->
+                    <!-- Device -->
+                    <VBox fx:id="navDevice" styleClass="nav-item" onMouseClicked="#onNavDevice">
+                        <Label text="⬡" styleClass="nav-icon"/>
+                        <Label text="DEVICE" styleClass="nav-label"/>
+                    </VBox>
 
-                <VBox fx:id="navProfiles" styleClass="nav-item" onMouseClicked="#onNavProfiles">
-                    <padding><Insets top="12" right="16" bottom="12" left="16"/></padding>
-                    <Label text="☰" styleClass="nav-icon"/>
-                    <Label text="Profiles" styleClass="nav-label"/>
-                </VBox>
+                    <!-- Profiles -->
+                    <VBox fx:id="navProfiles" styleClass="nav-item" onMouseClicked="#onNavProfiles">
+                        <Label text="☰" styleClass="nav-icon"/>
+                        <Label text="PROFILES" styleClass="nav-label"/>
+                    </VBox>
 
+                    <!-- Mapping -->
+                    <VBox fx:id="navMapping" styleClass="nav-item" onMouseClicked="#onNavMapping">
+                        <Label text="⌨" styleClass="nav-icon"/>
+                        <Label text="MAPPING" styleClass="nav-label"/>
+                    </VBox>
             </VBox>
-
-            <Region VBox.vgrow="ALWAYS"/>
-
-            <!-- Connection status at bottom of sidebar -->
-            <VBox styleClass="sidebar-status" alignment="CENTER">
-                <padding><Insets top="16" right="16" bottom="0" left="16"/></padding>
-                <HBox spacing="8" alignment="CENTER">
-                    <Label fx:id="statusDot" text="●" styleClass="status-dot-disconnected"/>
-                    <Label fx:id="statusLabel" text="Disconnected" styleClass="status-text"/>
-                </HBox>
-                <Button fx:id="connectButton" text="Connect"
-                        onAction="#onConnectClicked"
-                        styleClass="btn-connect" maxWidth="Infinity"/>
-            </VBox>
-
         </VBox>
+
     </left>
 
     <!-- Main content area -->

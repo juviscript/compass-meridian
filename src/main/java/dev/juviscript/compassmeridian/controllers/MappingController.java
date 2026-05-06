@@ -2,6 +2,7 @@ package dev.juviscript.compassmeridian.controllers;
 
 import dev.juviscript.compassmeridian.model.KeyMapping;
 import dev.juviscript.compassmeridian.model.Preset;
+import dev.juviscript.compassmeridian.utils.UIUtils;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -43,6 +44,11 @@ public class MappingController {
         downCombo.setValue("s");
         leftCombo.setValue("a");
         rightCombo.setValue("d");
+
+        UIUtils.addHoverFade(saveButton);
+        UIUtils.addClickPulse(saveButton);
+        UIUtils.addHoverFade(resetButton);
+        UIUtils.addClickPulse(resetButton);
     }
 
     @FXML private void onPresetWASD()   { applyMapping(Preset.wasd().getMapping()); }

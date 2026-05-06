@@ -21,7 +21,7 @@ public class MeridianApp extends Application {
         }
 
         try {
-            // Load icon for tray (AWT needs BufferedImage, not JavaFX Image)
+            // Load icon for tray.
             java.awt.image.BufferedImage trayIcon = javax.imageio.ImageIO.read(
                     MeridianApp.class.getResourceAsStream(
                             "/dev/juviscript/compassmeridian/assets/icon.png"
