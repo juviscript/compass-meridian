@@ -27,7 +27,7 @@ public class MainController {
     @FXML private ImageView brandIcon;
 
     // ── State ─────────────────────────────────────────────
-    private CompassSerial serial;
+    private final CompassSerial serial = new CompassSerial();
     private CompassProtocol protocol;
     private boolean connected = false;
     private DeviceController deviceController;
@@ -58,7 +58,6 @@ public class MainController {
             System.err.println("[ui] Could not load icon: " + e.getMessage());
         }
 
-        // Nav hover effects
         UIUtils.addHoverFadeChildren(navDevice);
         UIUtils.addHoverFadeChildren(navMapping);
         UIUtils.addHoverFadeChildren(navProfiles);
@@ -73,31 +72,46 @@ public class MainController {
         new Thread(() -> {
             for (int attempt = 1; attempt <= 3; attempt++) {
                 System.out.println("[serial] Auto-connect attempt " + attempt);
-
-                SerialPort port = CompassSerial.findCompass();
-                if (port != null) {
-                    serial = new CompassSerial();
-                    if (serial.connect(port)) {
-                        protocol = new CompassProtocol(serial);
-                        connected = true;
-                        Platform.runLater(() -> {
-                            if (deviceController != null) {
-                                deviceController.setConnectedState(true);
-                            }
-                        });
-                        System.out.println("[serial] Auto-connected on attempt " + attempt);
-                        return;
-                    }
+                SerialPort foundPort = CompassSerial.findCompass();
+                if (foundPort != null && serial.connect(foundPort)) {
+                    onCompassConnected();
+                    break;
                 }
-
                 try { Thread.sleep(1000); }
                 catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
                     return;
                 }
             }
-            System.out.println("[serial] Auto-connect failed after 3 attempts");
+            // Start hotplug listener regardless of auto-connect result
+            serial.startHotplugListener(
+                    this::onCompassConnected,
+                    this::onCompassDisconnected
+            );
         }).start();
+    }
+
+    // ── Hotplug callbacks ─────────────────────────────────
+    private void onCompassConnected() {
+        protocol = new CompassProtocol(serial);
+        connected = true;
+        Platform.runLater(() -> {
+            if (deviceController != null) {
+                deviceController.setConnectedState(true);
+            }
+            System.out.println("[ui] Compass connected");
+        });
+    }
+
+    private void onCompassDisconnected() {
+        connected = false;
+        protocol = null;
+        Platform.runLater(() -> {
+            if (deviceController != null) {
+                deviceController.setConnectedState(false);
+            }
+            System.out.println("[ui] Compass disconnected");
+        });
     }
 
     // ── Titlebar drag ─────────────────────────────────────
@@ -140,12 +154,12 @@ public class MainController {
             );
             Node page = loader.load();
 
-            // Store DeviceController reference when device page loads
             if (fxmlPath.equals("device-page.fxml")) {
                 deviceController = loader.getController();
+                // Immediately sync connection state on page load
+                deviceController.setConnectedState(connected);
             }
 
-            // Fade in page transition
             UIUtils.fadeIn(page, 200);
             contentArea.getChildren().setAll(page);
         } catch (IOException e) {
@@ -156,11 +170,8 @@ public class MainController {
 
     // ── Disconnect ────────────────────────────────────────
     public void disconnect() {
-        if (serial != null) serial.disconnect();
-        connected = false;
-        if (deviceController != null) {
-            deviceController.setConnectedState(false);
-        }
+        serial.disconnect();
+        onCompassDisconnected();
     }
 
     // ── Helpers ───────────────────────────────────────────
@@ -168,8 +179,8 @@ public class MainController {
         return MeridianApp.getPrimaryStage();
     }
 
-    public CompassSerial getSerial()         { return serial; }
-    public CompassProtocol getProtocol()     { return protocol; }
-    public boolean isConnected()             { return connected; }
+    public CompassSerial getSerial()              { return serial; }
+    public CompassProtocol getProtocol()          { return protocol; }
+    public boolean isConnected()                  { return connected; }
     public DeviceController getDeviceController() { return deviceController; }
 }
