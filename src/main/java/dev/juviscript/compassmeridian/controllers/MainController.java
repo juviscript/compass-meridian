@@ -15,6 +15,7 @@ import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.List;
 
 public class MainController {
 
@@ -97,6 +98,7 @@ public class MainController {
         connected = true;
         Platform.runLater(() -> {
             if (deviceController != null) {
+                deviceController.setProtocol(protocol); // ← add this
                 deviceController.setConnectedState(true);
             }
             System.out.println("[ui] Compass connected");
@@ -156,7 +158,7 @@ public class MainController {
 
             if (fxmlPath.equals("device-page.fxml")) {
                 deviceController = loader.getController();
-                // Immediately sync connection state on page load
+                deviceController.setProtocol(protocol);
                 deviceController.setConnectedState(connected);
             }
 
@@ -178,6 +180,7 @@ public class MainController {
     private Stage getStage() {
         return MeridianApp.getPrimaryStage();
     }
+
 
     public CompassSerial getSerial()              { return serial; }
     public CompassProtocol getProtocol()          { return protocol; }

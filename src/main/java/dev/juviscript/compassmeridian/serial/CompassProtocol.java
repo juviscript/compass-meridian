@@ -47,6 +47,11 @@ public class CompassProtocol {
         return lines.contains("RESET");
     }
 
+    public boolean restart() {
+        List<String> response = serial.sendCommand("RESTART");
+        return response.contains("RESTARTING");
+    }
+
     // ── Parsing ───────────────────────────────────────────
 
     private Map<String, String> parseKeyValue(List<String> lines) {

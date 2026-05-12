@@ -1,5 +1,7 @@
 package dev.juviscript.compassmeridian.controllers;
 
+import dev.juviscript.compassmeridian.serial.CompassProtocol;
+import dev.juviscript.compassmeridian.serial.CompassSerial;
 import dev.juviscript.compassmeridian.utils.UIUtils;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -24,6 +26,12 @@ public class DeviceController {
     @FXML private Label buildDateLabel;
     @FXML private Label installedVersion;
     @FXML private Button checkUpdatesButton;
+
+    private CompassProtocol protocol;
+
+    public void setProtocol(CompassProtocol protocol) {
+        this.protocol = protocol;
+    }
 
     @FXML
     public void initialize() {
@@ -69,28 +77,28 @@ public class DeviceController {
 
     @FXML
     private void onRestartClicked() {
-        if (restartButton.isDisabled()) return;
+        if (restartButton.isDisabled() || protocol == null) {
+            System.err.println("[device] Cannot restart - protocol is null");
+            return;
+        }
 
         new Thread(() -> {
-            // Send restart command over serial
-            // For now we disconnect and reconnect which forces a reboot
-            System.out.println("[device] Restarting Compass...");
-
-            // Visual feedback
             Platform.runLater(() -> {
                 restartButton.setDisable(true);
                 restartButton.setText("Restarting...");
-                connDot.getStyleClass().setAll("status-dot-disconnected");
-                connLabel.setText("Restarting...");
             });
 
-            try { Thread.sleep(2000); }
-            catch (InterruptedException e) { Thread.currentThread().interrupt(); }
+            try {
+                System.out.println("[device] Sending restart command to Compass");
+                protocol.restart();
+                Thread.sleep(3000);
+            } // wait for board to reboot
+            catch (InterruptedException e) {
+                System.out.println("[device] Restart interrupted: " + e.getMessage());
+                Thread.currentThread().interrupt();
+            }
 
-            Platform.runLater(() -> {
-                restartButton.setText("Restart Compass");
-                restartButton.setDisable(false);
-            });
+            Platform.runLater(() -> restartButton.setText("Restart Compass"));
         }).start();
     }
 

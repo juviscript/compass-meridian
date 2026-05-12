@@ -12,13 +12,23 @@ import java.util.List;
 
 public class CompassSerial {
 
-    private static final int BAUD_RATE  = 115200;
-    private static final int TIMEOUT_MS = 2000;
+    private static final int BAUD_RATE        = 115200;
+    private static final int TIMEOUT_MS       = 2000;
+    private static final int POLL_INTERVAL_MS = 2000;
+    private static final int RECONNECT_DELAY_MS = 3000; // cooldown after disconnect
 
     private SerialPort port;
     private BufferedReader reader;
     private OutputStream writer;
-    private boolean connected = false;
+    private volatile boolean connected = false;
+    private volatile boolean hotplugListenerRunning = false;
+    private volatile long lastDisconnectTime = 0;
+
+    // ── Getters ───────────────────────────────────────────
+
+    public String getPortName() {
+        return port != null ? port.getSystemPortName() : "None";
+    }
 
     // ── Port discovery ────────────────────────────────────
 
@@ -72,6 +82,7 @@ public class CompassSerial {
 
     public void disconnect() {
         connected = false;
+        lastDisconnectTime = System.currentTimeMillis();
         try {
             if (reader != null) reader.close();
             if (writer != null) writer.close();
@@ -84,6 +95,29 @@ public class CompassSerial {
 
     public boolean isConnected() {
         return connected && port != null && port.isOpen();
+    }
+
+    // ── Attach disconnect listener ────────────────────────
+
+    private void attachDisconnectListener(Runnable onDisconnect) {
+        if (port == null || !port.isOpen()) return;
+        port.addDataListener(new SerialPortDataListener() {
+            @Override
+            public int getListeningEvents() {
+                return SerialPort.LISTENING_EVENT_PORT_DISCONNECTED;
+            }
+
+            @Override
+            public void serialEvent(SerialPortEvent event) {
+                if (event.getEventType() ==
+                        SerialPort.LISTENING_EVENT_PORT_DISCONNECTED) {
+                    if (!connected) return;
+                    System.out.println("[serial] Compass disconnected");
+                    disconnect(); // ← call full disconnect instead of just setting flag
+                    onDisconnect.run();
+                }
+            }
+        });
     }
 
     // ── Synchronous send/receive ──────────────────────────
@@ -115,7 +149,8 @@ public class CompassSerial {
                         || line.equals("OK")
                         || line.equals("SAVED")
                         || line.equals("RESET")
-                        || line.startsWith("ERROR")) {
+                        || line.startsWith("ERROR")
+                        || line.equals("RESTARTING")) {
                     break;
                 }
             }
@@ -140,36 +175,27 @@ public class CompassSerial {
      */
     public void startHotplugListener(Runnable onConnect, Runnable onDisconnect) {
 
-        // ── Disconnect detector ───────────────────────────
-        // Attach a listener to the currently open port.
-        // jSerialComm fires PORT_DISCONNECTED when the device is unplugged.
-        if (port != null && port.isOpen()) {
-            port.addDataListener(new SerialPortDataListener() {
-                @Override
-                public int getListeningEvents() {
-                    return SerialPort.LISTENING_EVENT_PORT_DISCONNECTED;
-                }
+        // Attach disconnect listener to current port if open
+        attachDisconnectListener(onDisconnect);
 
-                @Override
-                public void serialEvent(SerialPortEvent event) {
-                    if (event.getEventType()
-                            == SerialPort.LISTENING_EVENT_PORT_DISCONNECTED) {
-                        System.out.println("[serial] Compass disconnected");
-                        connected = false;
-                        onDisconnect.run();
-                    }
-                }
-            });
-        }
+        // Only start one polling thread
+        if (hotplugListenerRunning) return;
+        hotplugListenerRunning = true;
 
-        // ── Connect detector ──────────────────────────────
-        // Poll every 2 seconds for a new Compass port appearing.
-        // When found, connect and re-attach the hotplug listener
-        // so disconnect detection works on the new connection.
-        // ── Connect detector ──────────────────────────────────────
         Thread hotplugThread = new Thread(() -> {
             while (true) {
                 if (!connected) {
+                    // Cooldown after disconnect — wait for board to finish rebooting
+                    long timeSinceDisconnect = System.currentTimeMillis() - lastDisconnectTime;
+                    if (timeSinceDisconnect < RECONNECT_DELAY_MS) {
+                        System.out.println("[serial] Cooldown — waiting for board to reboot");
+                        try { Thread.sleep(RECONNECT_DELAY_MS - timeSinceDisconnect); }
+                        catch (InterruptedException e) {
+                            Thread.currentThread().interrupt();
+                            return;
+                        }
+                    }
+
                     SerialPort found = findCompass();
                     if (found != null) {
                         System.out.println("[serial] Compass detected: "
@@ -182,13 +208,13 @@ public class CompassSerial {
                         }
 
                         if (connect(found)) {
-                            startHotplugListener(onConnect, onDisconnect);
+                            attachDisconnectListener(onDisconnect);
                             onConnect.run();
                         }
                     }
                 }
 
-                try { Thread.sleep(2000); }
+                try { Thread.sleep(POLL_INTERVAL_MS); }
                 catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
                     return;
@@ -196,13 +222,7 @@ public class CompassSerial {
             }
         }, "compass-hotplug-thread");
 
-        hotplugThread.setDaemon(true);  // ← dies automatically when app closes
+        hotplugThread.setDaemon(true);
         hotplugThread.start();
-    }
-
-    // ── Getters ───────────────────────────────────────────
-
-    public String getPortName() {
-        return port != null ? port.getSystemPortName() : "None";
     }
 }
