@@ -16,6 +16,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 public class MainController {
 
@@ -98,11 +99,26 @@ public class MainController {
         connected = true;
         Platform.runLater(() -> {
             if (deviceController != null) {
-                deviceController.setProtocol(protocol); // ← add this
+                deviceController.setProtocol(protocol);
                 deviceController.setConnectedState(true);
             }
-            System.out.println("[ui] Compass connected");
         });
+
+        // Fetch device info on background thread
+        new Thread(() -> {
+            Map<String, String> info = protocol.getInfo();
+            Platform.runLater(() -> {
+                if (deviceController != null) {
+                    deviceController.updateDeviceInfo(
+                            info.getOrDefault("name", "My Compass"),
+                            info.getOrDefault("version", "—"),
+                            info.getOrDefault("hw_rev", "—"),
+                            serial.getPortName(),
+                            info.getOrDefault("built", "—")
+                    );
+                }
+            });
+        }).start();
     }
 
     private void onCompassDisconnected() {

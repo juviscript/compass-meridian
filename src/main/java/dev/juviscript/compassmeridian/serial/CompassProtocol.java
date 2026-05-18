@@ -52,6 +52,11 @@ public class CompassProtocol {
         return response.contains("RESTARTING");
     }
 
+    public boolean setName(String name) {
+        List<String> lines = serial.sendCommand("SET_NAME " + name);
+        return lines.contains("OK");
+    }
+
     // ── Parsing ───────────────────────────────────────────
 
     private Map<String, String> parseKeyValue(List<String> lines) {

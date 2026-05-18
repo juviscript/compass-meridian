@@ -27,7 +27,25 @@
                 <!-- Card Title -->
                 <VBox>
                     <Label text="KLUTCH GAMING COMPASS" styleClass="card-title"/>
-                    <Label fx:id="deviceName" text="My Compass" styleClass="device-name" />
+                    <HBox>
+                        <!-- Device name — toggle between label and text field -->
+                        <HBox spacing="8" alignment="CENTER_LEFT">
+                            <StackPane>
+                                <Label fx:id="deviceNameLabel" text="My Compass"
+                                       styleClass="device-name"/>
+                                <TextField fx:id="deviceNameField"
+                                           styleClass="device-name-field"
+                                           visible="false" managed="false"
+                                           promptText="Enter device name..."
+                                           onKeyPressed="#onDeviceNameKeyPressed"/>
+                            </StackPane>
+                            <!-- Edit/confirm icon — toggles between pencil and checkmark -->
+                            <Label fx:id="editNameIcon" text="✎"
+                                   styleClass="edit-icon"
+                                   visible="false" managed="false"
+                                   onMouseClicked="#onEditIconClicked"/>
+                        </HBox>
+                    </HBox>
                 </VBox>
 
                 <!-- Connection Status -->
