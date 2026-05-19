@@ -55,12 +55,6 @@
                         <Label text="DEVICE" styleClass="nav-label"/>
                     </VBox>
 
-                    <!-- Profiles -->
-                    <VBox fx:id="navProfiles" styleClass="nav-item" onMouseClicked="#onNavProfiles">
-                        <Label text="☰" styleClass="nav-icon"/>
-                        <Label text="PROFILES" styleClass="nav-label"/>
-                    </VBox>
-
                     <!-- Mapping -->
                     <VBox fx:id="navMapping" styleClass="nav-item" onMouseClicked="#onNavMapping">
                         <Label text="⌨" styleClass="nav-icon"/>

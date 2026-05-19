@@ -12,43 +12,43 @@
       maxHeight="Infinity"
       VBox.vgrow="ALWAYS">
 
-    <!-- Hero Card — takes 50% of available height -->
+    <!-- Hero Card -->
     <HBox styleClass="card" spacing="24" alignment="CENTER_LEFT"
           VBox.vgrow="ALWAYS" maxHeight="Infinity">
-        <!-- Placeholder image -->
-        <StackPane styleClass="device-image-container"
+
+        <!-- Placeholder image — hidden when disconnected -->
+        <StackPane fx:id="deviceImageContainer"
+                   styleClass="device-image-container"
                    maxWidth="200" maxHeight="200"
-                   minWidth="200" minHeight="200">
+                   minWidth="200" minHeight="200"
+                   visible="false" managed="false">
             <ImageView fx:id="deviceImage" fitWidth="200" fitHeight="200" preserveRatio="true"/>
         </StackPane>
 
         <VBox HBox.hgrow="ALWAYS">
             <VBox styleClass="hero-card-header" spacing="8" alignment="CENTER_LEFT">
-                <!-- Card Title -->
+
+                <!-- Card Title + Device Name -->
                 <VBox>
                     <Label text="KLUTCH GAMING COMPASS" styleClass="card-title"/>
-                    <HBox>
-                        <!-- Device name — toggle between label and text field -->
-                        <HBox spacing="8" alignment="CENTER_LEFT">
-                            <StackPane>
-                                <Label fx:id="deviceNameLabel" text="My Compass"
-                                       styleClass="device-name"/>
-                                <TextField fx:id="deviceNameField"
-                                           styleClass="device-name-field"
-                                           visible="false" managed="false"
-                                           promptText="Enter device name..."
-                                           onKeyPressed="#onDeviceNameKeyPressed"/>
-                            </StackPane>
-                            <!-- Edit/confirm icon — toggles between pencil and checkmark -->
-                            <Label fx:id="editNameIcon" text="✎"
-                                   styleClass="edit-icon"
-                                   visible="false" managed="false"
-                                   onMouseClicked="#onEditIconClicked"/>
-                        </HBox>
+                    <HBox spacing="8" alignment="CENTER_LEFT">
+                        <StackPane>
+                            <Label fx:id="deviceNameLabel" text="Compass Not Detected"
+                                   styleClass="device-name"/>
+                            <TextField fx:id="deviceNameField"
+                                       styleClass="device-name-field"
+                                       visible="false" managed="false"
+                                       promptText="Enter device name..."
+                                       onKeyPressed="#onDeviceNameKeyPressed"/>
+                        </StackPane>
+                        <Label fx:id="editNameIcon" text="✎"
+                               styleClass="edit-icon"
+                               visible="false" managed="false"
+                               onMouseClicked="#onEditIconClicked"/>
                     </HBox>
                 </VBox>
 
-                <!-- Connection Status -->
+                <!-- Connection Status Badge -->
                 <HBox alignment="CENTER_LEFT">
                     <HBox fx:id="connBadge" styleClass="badge badge-red"
                           spacing="6" alignment="CENTER_LEFT">
@@ -58,36 +58,35 @@
                 </HBox>
             </VBox>
 
-            <!-- Stats and Quick Actions -->
+            <!-- Stats -->
             <VBox styleClass="stats-container" spacing="12">
+
                 <!-- Active Profile -->
                 <HBox HBox.hgrow="ALWAYS" styleClass="stats-container-row">
                     <VBox styleClass="stat-card" HBox.hgrow="ALWAYS" maxWidth="Infinity">
                         <Label text="ACTIVE PROFILE" styleClass="card-title"/>
-                        <Label text="WASD" styleClass="value-lg"/>
-                        <Label text="DEFAULT" styleClass="badge" />
+                        <Label fx:id="activeProfileLabel" text="--" styleClass="value-lg"/>
                     </VBox>
                 </HBox>
 
-                <!-- Total Profiles -->
+                <!-- Total Profiles + Quick Actions -->
                 <HBox styleClass="stats-container-row" spacing="12">
-                    <!-- Total Profiles -->
                     <VBox styleClass="stat-card" HBox.hgrow="ALWAYS" maxWidth="Infinity">
                         <Label text="TOTAL PROFILES" styleClass="card-title"/>
-                        <Label text="10" styleClass="value-lg"/>
+                        <Label fx:id="totalProfilesLabel" text="--" styleClass="value-lg"/>
                     </VBox>
-                    <!-- Restart Button -->
-                    <VBox styleClass="stat-card" spacing="2"
+                    <VBox styleClass="stat-card" spacing="8"
                           HBox.hgrow="ALWAYS" maxWidth="Infinity">
                         <Label text="QUICK ACTIONS" styleClass="card-title"/>
                         <Region VBox.vgrow="ALWAYS"/>
                         <Button fx:id="restartButton" text="Restart Compass"
-                                styleClass="btn-primary" onAction="#onRestartClicked"
-                                disable="true"
-                        >
-                        <tooltip>
-                            <Tooltip text="Compass not connected. Please connect your device."/>
-                        </tooltip>
+                                styleClass="btn-primary"
+                                style="-fx-padding: 5 12 5 12; -fx-font-size: 10px;"
+                                onAction="#onRestartClicked"
+                                disable="true" maxWidth="Infinity">
+                            <tooltip>
+                                <Tooltip text="Compass not connected. Please connect your device."/>
+                            </tooltip>
                         </Button>
                     </VBox>
                 </HBox>
@@ -95,7 +94,7 @@
         </VBox>
     </HBox>
 
-    <!-- Bottom row — also takes 50% -->
+    <!-- Bottom row -->
     <HBox spacing="24" alignment="CENTER_LEFT"
           VBox.vgrow="ALWAYS" maxHeight="Infinity">
 
@@ -158,7 +157,9 @@
 
             <Region VBox.vgrow="ALWAYS"/>
 
-            <Button text="Check for Updates" styleClass="btn-secondary"
+            <Button text="Check for Updates"
+                    styleClass="btn-secondary"
+                    style="-fx-padding: 5 12 5 12; -fx-font-size: 10px;"
                     fx:id="checkUpdatesButton" onAction="#onCheckUpdates" maxWidth="Infinity"/>
         </VBox>
     </HBox>

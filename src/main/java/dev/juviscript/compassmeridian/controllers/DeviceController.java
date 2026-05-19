@@ -12,10 +12,12 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
 public class DeviceController {
 
+    @FXML private StackPane deviceImageContainer;
     @FXML private ImageView deviceImage;
     @FXML private Label connDot;
     @FXML private Label connLabel;
@@ -29,6 +31,8 @@ public class DeviceController {
     @FXML private Button checkUpdatesButton;
     @FXML private Button restartButton;
     @FXML private Label editNameIcon;
+    @FXML private Label activeProfileLabel;
+    @FXML private Label totalProfilesLabel;
 
     private boolean editMode = false;
     private CompassProtocol protocol;
@@ -57,12 +61,6 @@ public class DeviceController {
 
     // ── Device name editing ───────────────────────────────
     @FXML
-    private void onDeviceNameClicked() {
-        if (protocol == null) return; // only editable when connected
-        enterEditMode();
-    }
-
-    @FXML
     private void onDeviceNameKeyPressed(javafx.scene.input.KeyEvent e) {
         if (e.getCode() == KeyCode.ENTER) {
             confirmNameChange();
@@ -81,7 +79,6 @@ public class DeviceController {
         deviceNameField.requestFocus();
         deviceNameField.selectAll();
 
-        // Switch to checkmark
         editNameIcon.setText("✔");
         editNameIcon.getStyleClass().setAll("edit-icon", "edit-icon-confirm");
     }
@@ -93,7 +90,6 @@ public class DeviceController {
         deviceNameField.setVisible(false);
         deviceNameField.setManaged(false);
 
-        // Switch back to pencil
         editNameIcon.setText("✎");
         editNameIcon.getStyleClass().setAll("edit-icon");
     }
@@ -116,21 +112,18 @@ public class DeviceController {
             return;
         }
 
-        // Update label immediately for responsive feel
         deviceNameLabel.setText(newName);
         exitEditMode();
 
-        // Send to firmware on background thread
         new Thread(() -> {
             boolean ok = protocol.setName(newName);
             if (ok) {
                 protocol.save();
                 System.out.println("[device] Name saved: " + newName);
             } else {
-                // Revert label if save failed
-                Platform.runLater(() -> {
-                    System.err.println("[device] Failed to save name");
-                });
+                Platform.runLater(() ->
+                        System.err.println("[device] Failed to save name")
+                );
             }
         }).start();
     }
@@ -146,12 +139,23 @@ public class DeviceController {
         );
         restartButton.setDisable(!isConnected);
 
-        // Show edit icon only when connected
+        // Show/hide placeholder image
+        deviceImageContainer.setVisible(isConnected);
+        deviceImageContainer.setManaged(isConnected);
+
+        // Show/hide edit icon
         editNameIcon.setVisible(isConnected);
         editNameIcon.setManaged(isConnected);
 
         // If disconnected mid-edit, exit edit mode
         if (!isConnected && editMode) exitEditMode();
+
+        // Reset labels when disconnected
+        if (!isConnected) {
+            deviceNameLabel.setText("Compass Not Detected");
+            activeProfileLabel.setText("--");
+            totalProfilesLabel.setText("--");
+        }
 
         VBox parent = (VBox) restartButton.getParent();
         Tooltip.install(parent, new Tooltip(
@@ -161,17 +165,18 @@ public class DeviceController {
         ));
     }
 
-
-
     // ── Device info ───────────────────────────────────────
     public void updateDeviceInfo(String name, String version,
                                  String hwRev, String port,
-                                 String buildDate) {
+                                 String buildDate, String activeProfile,
+                                 int totalProfiles) {
         deviceNameLabel.setText(name);
         hwRevLabel.setText(hwRev);
         portLabel.setText(port);
         buildDateLabel.setText(buildDate);
         installedVersion.setText("v" + version);
+        activeProfileLabel.setText(activeProfile.isEmpty() ? "--" : activeProfile);
+        totalProfilesLabel.setText(String.valueOf(totalProfiles));
     }
 
     // ── Actions ───────────────────────────────────────────

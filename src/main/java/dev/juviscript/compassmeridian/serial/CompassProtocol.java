@@ -1,7 +1,9 @@
 package dev.juviscript.compassmeridian.serial;
 
 import dev.juviscript.compassmeridian.model.KeyMapping;
+import dev.juviscript.compassmeridian.model.Profile;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -57,6 +59,30 @@ public class CompassProtocol {
         return lines.contains("OK");
     }
 
+    public List<String> getProfiles() {
+        return serial.sendCommand("GET_PROFILES");
+    }
+
+    public boolean saveProfile(String name) {
+        List<String> response = serial.sendCommand("SAVE_PROFILE " + name);
+        return response.contains("OK");
+    }
+
+    public boolean loadProfile(String filename) {
+        List<String> response = serial.sendCommand("LOAD_PROFILE " + filename);
+        return response.contains("OK");
+    }
+
+    public boolean deleteProfile(String filename) {
+        List<String> response = serial.sendCommand("DELETE_PROFILE " + filename);
+        return response.contains("OK");
+    }
+
+    public boolean renameProfile(String oldFilename, String newName) {
+        List<String> response = serial.sendCommand("RENAME_PROFILE " + oldFilename + " " + newName);
+        return response.contains("OK");
+    }
+
     // ── Parsing ───────────────────────────────────────────
 
     private Map<String, String> parseKeyValue(List<String> lines) {
@@ -69,5 +95,16 @@ public class CompassProtocol {
             }
         }
         return map;
+    }
+
+    public List<Profile> getProfileList() {
+        List<String> lines = serial.sendCommand("GET_PROFILES");
+        List<Profile> profiles = new ArrayList<>();
+        for (String line : lines) {
+            if (line.equals("END")) break;
+            Profile p = Profile.fromLine(line);
+            if (p != null) profiles.add(p);
+        }
+        return profiles;
     }
 }

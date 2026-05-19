@@ -341,6 +341,65 @@
     -fx-effect: dropshadow(gaussian, rgba(204,0,0,0.24), 14, 0, 0, 3);
 }
 
+/* ── Small button variant ─────────────────────────────────── */
+.btn-primary.btn-sm {
+    -fx-padding: 5 12 5 12;
+    -fx-font-size: 10px;
+    -fx-background-color: linear-gradient(to bottom, accent-red-bright, accent-red);
+    -fx-text-fill: #ffffff;
+    -fx-font-family: "Montserrat";
+    -fx-font-weight: 800;
+    -fx-background-radius: 6px;
+    -fx-border-radius: 6px;
+    -fx-border-color: rgba(255,255,255,0.06);
+    -fx-border-width: 1px;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(204,0,0,0.24), 10, 0, 0, 2);
+}
+
+.btn-primary.btn-sm:hover {
+    -fx-background-color: linear-gradient(to bottom, #ff1a1a, #d80000);
+    -fx-effect: dropshadow(gaussian, rgba(255,0,0,0.34), 14, 0, 0, 3);
+}
+
+.btn-primary.btn-sm:pressed {
+    -fx-background-color: accent-red-dark;
+    -fx-translate-y: 1px;
+}
+
+.btn-primary.btn-sm:disabled {
+    -fx-background-color: #20242d;
+    -fx-text-fill: #5c6472;
+    -fx-border-color: #2a303a;
+    -fx-opacity: 0.72;
+    -fx-effect: none;
+}
+
+.btn-secondary.btn-sm {
+    -fx-padding: 5 12 5 12;
+    -fx-font-size: 10px;
+    -fx-background-color: surface-control;
+    -fx-text-fill: text-secondary;
+    -fx-font-family: "Montserrat";
+    -fx-font-weight: 800;
+    -fx-background-radius: 6px;
+    -fx-border-color: border-control;
+    -fx-border-radius: 6px;
+    -fx-border-width: 1px;
+    -fx-cursor: hand;
+}
+
+.btn-secondary.btn-sm:hover {
+    -fx-background-color: surface-hover;
+    -fx-text-fill: text-primary;
+    -fx-border-color: border-hover;
+}
+
+.btn-secondary.btn-sm:pressed {
+    -fx-background-color: #1b2028;
+    -fx-translate-y: 1px;
+}
+
 /* ── Badges ───────────────────────────────────────────────── */
 .badge {
     -fx-background-color: #252a33;
@@ -381,6 +440,22 @@
     -fx-background-color: rgba(255,214,0,0.16);
     -fx-text-fill: #ffd600;
     -fx-border-color: rgba(255,214,0,0.22);
+    -fx-border-radius: 20px;
+    -fx-border-width: 1px;
+}
+
+.badge-builtin {
+    -fx-background-color: rgba(74,158,255,0.14);
+    -fx-text-fill: #4a9eff;
+    -fx-border-color: rgba(74,158,255,0.22);
+    -fx-border-radius: 20px;
+    -fx-border-width: 1px;
+}
+
+.badge-custom {
+    -fx-background-color: rgba(168,176,189,0.10);
+    -fx-text-fill: #a8b0bd;
+    -fx-border-color: rgba(168,176,189,0.16);
     -fx-border-radius: 20px;
     -fx-border-width: 1px;
 }
@@ -498,6 +573,7 @@
     -fx-font-size: 11px;
 }
 
+/* ── Device name field ────────────────────────────────────── */
 .device-name-field {
     -fx-background-color: #1f1f1f;
     -fx-text-fill: #ffffff;
@@ -508,13 +584,6 @@
     -fx-border-radius: 4px;
     -fx-background-radius: 4px;
     -fx-padding: 4 8 4 8;
-}
-
-.device-name-edit-hint {
-    -fx-text-fill: #444444;
-    -fx-font-size: 9px;
-    -fx-font-family: "Montserrat";
-    -fx-padding: 2 0 0 0;
 }
 
 .edit-icon {
@@ -535,4 +604,172 @@
 
 .edit-icon-confirm:hover {
     -fx-text-fill: #00ff88;
+}
+
+/* ── Profile rows ─────────────────────────────────────────── */
+.profile-row {
+    -fx-background-color: surface-stat;
+    -fx-background-radius: 8px;
+    -fx-border-color: border-soft;
+    -fx-border-radius: 8px;
+    -fx-border-width: 1px;
+    -fx-padding: 10 16 10 16;
+}
+
+.profile-row:hover {
+    -fx-border-color: border-hover;
+    -fx-background-color: surface-stat-hover;
+}
+
+.profile-row-active {
+    -fx-border-color: accent-red;
+}
+
+.profile-name {
+    -fx-text-fill: text-primary;
+    -fx-font-family: "Montserrat";
+    -fx-font-size: 12px;
+    -fx-font-weight: 600;
+}
+
+.profile-meta {
+    -fx-text-fill: text-muted;
+    -fx-font-family: "Montserrat";
+    -fx-font-size: 10px;
+}
+
+/* ── D-Pad ────────────────────────────────────────────────── */
+.dpad-center {
+    -fx-text-fill: accent-red;
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+    -fx-padding: 0 8 0 8;
+    -fx-effect: dropshadow(gaussian, rgba(204,0,0,0.4), 10, 0, 0, 0);
+}
+
+.dpad-combo {
+    -fx-background-color: surface-control;
+    -fx-border-color: border-control;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+    -fx-font-family: "Montserrat";
+    -fx-font-weight: 700;
+    -fx-font-size: 12px;
+}
+
+.dpad-combo .list-cell {
+    -fx-text-fill: text-primary;
+    -fx-background-color: surface-control;
+    -fx-font-family: "Montserrat";
+    -fx-font-size: 12px;
+}
+
+.dpad-combo:focused {
+    -fx-border-color: accent-red;
+}
+
+.dpad-arrow {
+    -fx-text-fill: accent-red;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+.dpad-label {
+    -fx-text-fill: text-muted;
+    -fx-font-family: "Montserrat";
+    -fx-font-size: 9px;
+    -fx-font-weight: 600;
+    -fx-letter-spacing: 1px;
+}
+
+/* ── Modal ────────────────────────────────────────────────── */
+.modal-root {
+    -fx-background-color: bg-card;
+    -fx-border-color: border-soft;
+    -fx-border-width: 1px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.8), 24, 0, 0, 8);
+}
+
+.modal-titlebar {
+    -fx-background-color: bg-elevated;
+    -fx-pref-height: 36px;
+    -fx-padding: 0 0 0 16;
+    -fx-border-color: border-muted;
+    -fx-border-width: 0 0 1 0;
+}
+
+.modal-title {
+    -fx-text-fill: text-primary;
+    -fx-font-family: "Montserrat";
+    -fx-font-size: 11px;
+    -fx-font-weight: 700;
+    -fx-letter-spacing: 3px;
+}
+
+.preview-value {
+    -fx-text-fill: accent-red-bright;
+    -fx-font-family: "Montserrat";
+    -fx-font-size: 13px;
+    -fx-font-weight: 700;
+    -fx-letter-spacing: 1px;
+}
+
+/* ── Icon buttons ─────────────────────────────────────────── */
+.icon-btn {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-font-size: 12px;
+    -fx-pref-width: 28px;
+    -fx-pref-height: 28px;
+    -fx-padding: 0;
+    -fx-cursor: hand;
+    -fx-background-radius: 4px;
+}
+
+.icon-btn-load {
+    -fx-text-fill: text-muted;
+}
+
+.icon-btn-load:hover {
+    -fx-text-fill: #00e676;
+    -fx-background-color: rgba(0,230,118,0.10);
+}
+
+.icon-btn-delete {
+    -fx-text-fill: text-muted;
+}
+
+.icon-btn-delete:hover {
+    -fx-text-fill: accent-red-bright;
+    -fx-background-color: rgba(204,0,0,0.12);
+}
+
+/* ── Profile scroll ───────────────────────────────────────── */
+.profile-scroll {
+    -fx-background-color: transparent;
+    -fx-background: transparent;
+    -fx-border-color: transparent;
+}
+
+.profile-scroll .viewport {
+    -fx-background-color: transparent;
+}
+
+.profile-scroll .scroll-bar:vertical {
+    -fx-background-color: transparent;
+    -fx-pref-width: 6px;
+}
+
+.profile-scroll .scroll-bar:vertical .thumb {
+    -fx-background-color: accent-red;
+    -fx-background-radius: 3px;
+}
+
+.profile-scroll .scroll-bar:vertical .track {
+    -fx-background-color: transparent;
+}
+
+.profile-scroll .scroll-bar:horizontal {
+    -fx-pref-height: 0;
+    -fx-opacity: 0;
 }

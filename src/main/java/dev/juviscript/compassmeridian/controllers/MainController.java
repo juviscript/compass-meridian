@@ -2,6 +2,7 @@ package dev.juviscript.compassmeridian.controllers;
 
 import com.fazecast.jSerialComm.SerialPort;
 import dev.juviscript.compassmeridian.MeridianApp;
+import dev.juviscript.compassmeridian.model.Profile;
 import dev.juviscript.compassmeridian.serial.CompassProtocol;
 import dev.juviscript.compassmeridian.serial.CompassSerial;
 import dev.juviscript.compassmeridian.utils.UIUtils;
@@ -24,7 +25,6 @@ public class MainController {
     @FXML private StackPane contentArea;
     @FXML private VBox navDevice;
     @FXML private VBox navMapping;
-    @FXML private VBox navProfiles;
     @FXML private ImageView appIcon;
     @FXML private ImageView brandIcon;
 
@@ -62,7 +62,6 @@ public class MainController {
 
         UIUtils.addHoverFadeChildren(navDevice);
         UIUtils.addHoverFadeChildren(navMapping);
-        UIUtils.addHoverFadeChildren(navProfiles);
 
         setActiveNav(navDevice);
         loadPage("device-page.fxml");
@@ -85,7 +84,6 @@ public class MainController {
                     return;
                 }
             }
-            // Start hotplug listener regardless of auto-connect result
             serial.startHotplugListener(
                     this::onCompassConnected,
                     this::onCompassDisconnected
@@ -104,9 +102,22 @@ public class MainController {
             }
         });
 
-        // Fetch device info on background thread
+        // Fetch device info + profiles sequentially on background thread
         new Thread(() -> {
             Map<String, String> info = protocol.getInfo();
+            List<Profile> profiles   = protocol.getProfileList();
+
+            // Count totals
+            int totalProfiles    = profiles.size();
+            String activeProfile = info.getOrDefault("active_profile", "");
+
+            // Find display name for active profile
+            String activeDisplayName = profiles.stream()
+                    .filter(p -> p.getFilename().equals(activeProfile))
+                    .map(Profile::getDisplayName)
+                    .findFirst()
+                    .orElse(activeProfile);
+
             Platform.runLater(() -> {
                 if (deviceController != null) {
                     deviceController.updateDeviceInfo(
@@ -114,7 +125,9 @@ public class MainController {
                             info.getOrDefault("version", "—"),
                             info.getOrDefault("hw_rev", "—"),
                             serial.getPortName(),
-                            info.getOrDefault("built", "—")
+                            info.getOrDefault("built", "—"),
+                            activeDisplayName,
+                            totalProfiles
                     );
                 }
             });
@@ -151,9 +164,8 @@ public class MainController {
     @FXML private void onClose()    { getStage().close(); }
 
     // ── Navigation ────────────────────────────────────────
-    @FXML private void onNavDevice()   { setActiveNav(navDevice);   loadPage("device-page.fxml"); }
-    @FXML private void onNavMapping()  { setActiveNav(navMapping);  loadPage("mapping-page.fxml"); }
-    @FXML private void onNavProfiles() { setActiveNav(navProfiles); loadPage("profiles-page.fxml"); }
+    @FXML private void onNavDevice()  { setActiveNav(navDevice);  loadPage("device-page.fxml"); }
+    @FXML private void onNavMapping() { setActiveNav(navMapping); loadPage("mapping-page.fxml"); }
 
     private void setActiveNav(VBox selected) {
         if (currentNav != null) {
@@ -176,6 +188,38 @@ public class MainController {
                 deviceController = loader.getController();
                 deviceController.setProtocol(protocol);
                 deviceController.setConnectedState(connected);
+
+                // Re-fetch and populate device info if already connected
+                if (connected && protocol != null) {
+                    new Thread(() -> {
+                        Map<String, String> info   = protocol.getInfo();
+                        List<Profile> profiles     = protocol.getProfileList();
+                        int totalProfiles          = profiles.size();
+                        String activeProfile       = info.getOrDefault("active_profile", "");
+                        String activeDisplayName   = profiles.stream()
+                                .filter(p -> p.getFilename().equals(activeProfile))
+                                .map(Profile::getDisplayName)
+                                .findFirst()
+                                .orElse(activeProfile);
+
+                        Platform.runLater(() -> deviceController.updateDeviceInfo(
+                                info.getOrDefault("name", "My Compass"),
+                                info.getOrDefault("version", "—"),
+                                info.getOrDefault("hw_rev", "—"),
+                                serial.getPortName(),
+                                info.getOrDefault("built", "—"),
+                                activeDisplayName,
+                                totalProfiles
+                        ));
+                    }).start();
+                }
+            }
+
+            if (fxmlPath.equals("mapping-page.fxml")) {
+                MappingController mappingController = loader.getController();
+                if (protocol != null) {
+                    mappingController.setProtocol(protocol);
+                }
             }
 
             UIUtils.fadeIn(page, 200);
@@ -196,7 +240,6 @@ public class MainController {
     private Stage getStage() {
         return MeridianApp.getPrimaryStage();
     }
-
 
     public CompassSerial getSerial()              { return serial; }
     public CompassProtocol getProtocol()          { return protocol; }

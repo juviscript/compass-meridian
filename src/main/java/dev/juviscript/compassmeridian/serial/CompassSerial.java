@@ -126,6 +126,8 @@ public class CompassSerial {
      * Send a command and return the response lines up to
      * "END", "OK", "SAVED", "RESET", or "ERROR".
      */
+    private final Object serialLock = new Object();
+
     public List<String> sendCommand(String command) {
         List<String> response = new ArrayList<>();
         if (!isConnected()) {
@@ -133,29 +135,31 @@ public class CompassSerial {
             return response;
         }
 
-        try {
-            String msg = command + "\n";
-            writer.write(msg.getBytes());
-            writer.flush();
-            System.out.println("[serial] Sent: " + command);
+        synchronized (serialLock) {
+            try {
+                String msg = command + "\n";
+                writer.write(msg.getBytes());
+                writer.flush();
+                System.out.println("[serial] Sent: " + command);
 
-            String line;
-            while ((line = reader.readLine()) != null) {
-                line = line.trim();
-                System.out.println("[serial] Recv: " + line);
-                response.add(line);
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    line = line.trim();
+                    System.out.println("[serial] Recv: " + line);
+                    response.add(line);
 
-                if (line.equals("END")
-                        || line.equals("OK")
-                        || line.equals("SAVED")
-                        || line.equals("RESET")
-                        || line.startsWith("ERROR")
-                        || line.equals("RESTARTING")) {
-                    break;
+                    if (line.equals("END")
+                            || line.equals("OK")
+                            || line.equals("SAVED")
+                            || line.equals("RESET")
+                            || line.startsWith("ERROR")
+                            || line.equals("RESTARTING")) {
+                        break;
+                    }
                 }
+            } catch (Exception e) {
+                System.err.println("[serial] Error: " + e.getMessage());
             }
-        } catch (Exception e) {
-            System.err.println("[serial] Error: " + e.getMessage());
         }
 
         return response;
