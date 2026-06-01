@@ -27,13 +27,15 @@
             </HBox>
 
             <!-- D-Pad -->
-            <VBox alignment="CENTER" spacing="0" VBox.vgrow="ALWAYS">
+            <VBox alignment="CENTER" spacing="0">
 
+                <!-- Up -->
                 <HBox alignment="CENTER" prefHeight="60">
                     <ComboBox fx:id="upCombo" styleClass="dpad-combo"
                               prefWidth="90" onAction="#onMappingChanged"/>
                 </HBox>
 
+                <!-- Middle row -->
                 <HBox alignment="CENTER" spacing="0" prefHeight="60">
                     <HBox alignment="CENTER" prefWidth="110">
                         <ComboBox fx:id="leftCombo" styleClass="dpad-combo"
@@ -48,11 +50,51 @@
                     </HBox>
                 </HBox>
 
+                <!-- Down -->
                 <HBox alignment="CENTER" prefHeight="60">
                     <ComboBox fx:id="downCombo" styleClass="dpad-combo"
                               prefWidth="90" onAction="#onMappingChanged"/>
                 </HBox>
 
+                <!-- Click -->
+                <HBox alignment="CENTER" spacing="8" prefHeight="40">
+                    <Label text="● CLICK" styleClass="dpad-label"
+                           style="-fx-font-size: 10px;"/>
+                    <ComboBox fx:id="clickCombo" styleClass="dpad-combo"
+                              prefWidth="90" onAction="#onMappingChanged"/>
+                </HBox>
+
+            </VBox>
+
+            <Separator/>
+
+            <!-- Sensitivity -->
+            <VBox spacing="10">
+                <Label text="SENSITIVITY" styleClass="card-title"/>
+
+                <!-- Main threshold -->
+                <HBox spacing="8" alignment="CENTER_LEFT">
+                    <Label text="Directional" styleClass="stat-label"
+                           style="-fx-min-width: 80px;"/>
+                    <Slider fx:id="thresholdSlider" min="10" max="500"
+                            value="120" HBox.hgrow="ALWAYS" maxWidth="Infinity"
+                            showTickMarks="false" styleClass="sensitivity-slider"/>
+                    <Label fx:id="thresholdLabel" text="120"
+                           styleClass="value"
+                           style="-fx-min-width: 32px; -fx-font-size: 11px;"/>
+                </HBox>
+
+                <!-- Diagonal threshold -->
+                <HBox spacing="8" alignment="CENTER_LEFT">
+                    <Label text="Diagonal" styleClass="stat-label"
+                           style="-fx-min-width: 80px;"/>
+                    <Slider fx:id="diagonalSlider" min="10" max="500"
+                            value="60" HBox.hgrow="ALWAYS" maxWidth="Infinity"
+                            showTickMarks="false" styleClass="sensitivity-slider"/>
+                    <Label fx:id="diagonalLabel" text="60"
+                           styleClass="value"
+                           style="-fx-min-width: 32px; -fx-font-size: 11px;"/>
+                </HBox>
             </VBox>
 
             <!-- Actions -->

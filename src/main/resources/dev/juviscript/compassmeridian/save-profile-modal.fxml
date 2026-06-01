@@ -9,7 +9,7 @@
       fx:controller="dev.juviscript.compassmeridian.controllers.SaveProfileModalController"
       styleClass="modal-root"
       spacing="0"
-      prefWidth="360">
+      prefWidth="380">
 
     <!-- Modal titlebar -->
     <HBox styleClass="modal-titlebar" alignment="CENTER_LEFT"
@@ -39,9 +39,9 @@
             <Label text="MAPPING PREVIEW" styleClass="card-title"/>
             <GridPane hgap="16" vgap="8">
                 <columnConstraints>
-                    <ColumnConstraints minWidth="60"/>
+                    <ColumnConstraints minWidth="80"/>
                     <ColumnConstraints hgrow="ALWAYS"/>
-                    <ColumnConstraints minWidth="60"/>
+                    <ColumnConstraints minWidth="80"/>
                     <ColumnConstraints hgrow="ALWAYS"/>
                 </columnConstraints>
 
@@ -64,6 +64,22 @@
                        GridPane.rowIndex="1" GridPane.columnIndex="2"/>
                 <Label fx:id="previewRight" text="d" styleClass="preview-value"
                        GridPane.rowIndex="1" GridPane.columnIndex="3"/>
+
+                <Label text="● CLICK" styleClass="dpad-label"
+                       GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                <Label fx:id="previewClick" text="SPACE" styleClass="preview-value"
+                       GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+                <Label text="Directional" styleClass="dpad-label"
+                       GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+                <Label fx:id="previewThreshold" text="120" styleClass="preview-value"
+                       GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+
+                <Label text="Diagonal" styleClass="dpad-label"
+                       GridPane.rowIndex="3" GridPane.columnIndex="2"/>
+                <Label fx:id="previewDiagonal" text="60" styleClass="preview-value"
+                       GridPane.rowIndex="3" GridPane.columnIndex="3"/>
+
             </GridPane>
         </VBox>
 

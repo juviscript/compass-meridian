@@ -13,15 +13,15 @@ public class Preset {
     // ── Built-in presets ──────────────────────────────────
 
     public static Preset wasd() {
-        return new Preset("WASD", new KeyMapping("w", "s", "a", "d"));
+        return new Preset("WASD", new KeyMapping("w", "s", "a", "d", "SPACE", 120, 60));
     }
 
     public static Preset arrows() {
-        return new Preset("Arrow Keys", new KeyMapping("UP", "DOWN", "LEFT", "RIGHT"));
+        return new Preset("Arrow Keys", new KeyMapping("UP", "DOWN", "LEFT", "RIGHT", "SPACE", 120, 60));
     }
 
     public static Preset ijkl() {
-        return new Preset("IJKL", new KeyMapping("i", "k", "j", "l"));
+        return new Preset("IJKL", new KeyMapping("i", "k", "j", "l", "SPACE", 120, 60));
     }
 
     // ── Getters / Setters ─────────────────────────────────

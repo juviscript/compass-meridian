@@ -28,8 +28,15 @@ public class MappingController {
     @FXML private ComboBox<String> downCombo;
     @FXML private ComboBox<String> leftCombo;
     @FXML private ComboBox<String> rightCombo;
+    @FXML private ComboBox<String> clickCombo;
     @FXML private Button saveButton;
     @FXML private Button resetButton;
+
+    // ── Sensitivity bindings ──────────────────────────────
+    @FXML private Slider thresholdSlider;
+    @FXML private Slider diagonalSlider;
+    @FXML private Label thresholdLabel;
+    @FXML private Label diagonalLabel;
 
     // ── Profile bindings ──────────────────────────────────
     @FXML private VBox builtinProfilesList;
@@ -48,9 +55,14 @@ public class MappingController {
             "w", "a", "s", "d", "i", "j", "k", "l",
             "UP", "DOWN", "LEFT", "RIGHT",
             "SPACE", "ENTER", "TAB", "ESC",
-            "SHIFT", "CTRL", "ALT",
-            "F1", "F2", "F3", "F4", "F5",
-            "F6", "F7", "F8", "F9", "F10", "F11", "F12"
+            "SHIFT", "CTRL", "ALT", "GUI", "CAPSLOCK",
+            "F1", "F2", "F3", "F4", "F5", "F6",
+            "F7", "F8", "F9", "F10", "F11", "F12",
+            "F13", "F14", "F15", "F16", "F17", "F18",
+            "F19", "F20", "F21", "F22", "F23", "F24",
+            "DELETE", "INSERT", "HOME", "END", "PAGEUP", "PAGEDOWN",
+            "COMMA", "PERIOD", "SLASH", "SEMICOLON", "QUOTE",
+            "BACKSLASH", "MINUS", "EQUALS", "LBRACKET", "RBRACKET", "GRAVE"
     );
 
     // ── Init ──────────────────────────────────────────────
@@ -60,11 +72,21 @@ public class MappingController {
         downCombo.setItems(FXCollections.observableArrayList(KEY_OPTIONS));
         leftCombo.setItems(FXCollections.observableArrayList(KEY_OPTIONS));
         rightCombo.setItems(FXCollections.observableArrayList(KEY_OPTIONS));
+        clickCombo.setItems(FXCollections.observableArrayList(KEY_OPTIONS));
 
         upCombo.setValue("w");
         downCombo.setValue("s");
         leftCombo.setValue("a");
         rightCombo.setValue("d");
+        clickCombo.setValue("SPACE");
+
+        // Slider listeners
+        thresholdSlider.valueProperty().addListener((obs, oldVal, newVal) ->
+                thresholdLabel.setText(String.valueOf(newVal.intValue()))
+        );
+        diagonalSlider.valueProperty().addListener((obs, oldVal, newVal) ->
+                diagonalLabel.setText(String.valueOf(newVal.intValue()))
+        );
 
         if (saveButton != null)          { UIUtils.addHoverFade(saveButton);          UIUtils.addClickPulse(saveButton); }
         if (resetButton != null)         { UIUtils.addHoverFade(resetButton);         UIUtils.addClickPulse(resetButton); }
@@ -83,6 +105,9 @@ public class MappingController {
         String down  = downCombo.getValue();
         String left  = leftCombo.getValue();
         String right = rightCombo.getValue();
+        String click = clickCombo.getValue();
+        int threshold = (int) thresholdSlider.getValue();
+        int diagonal  = (int) diagonalSlider.getValue();
 
         new Thread(() -> {
             boolean ok = true;
@@ -90,6 +115,9 @@ public class MappingController {
             ok &= protocol.setKey("down",  down);
             ok &= protocol.setKey("left",  left);
             ok &= protocol.setKey("right", right);
+            ok &= protocol.setKey("click", click);
+            ok &= protocol.setThreshold(threshold);
+            ok &= protocol.setDiagonalThreshold(diagonal);
             boolean saved = protocol.save();
 
             boolean success = ok && saved;
@@ -99,19 +127,58 @@ public class MappingController {
         }).start();
     }
 
-    private void showStatus(String message, boolean isError) {
-        if (saveProfileStatus == null) return;
-        saveProfileStatus.setText(message);
-        saveProfileStatus.setStyle(isError
-                ? "-fx-text-fill: #cc0000; -fx-font-size: 10px;"
-                : "-fx-text-fill: #00e676; -fx-font-size: 10px;");
+    @FXML
+    private void onResetClicked() {
+        if (protocol == null) return;
+        new Thread(() -> {
+            boolean ok = protocol.reset();
+            Platform.runLater(() -> {
+                if (ok) applyMapping(new KeyMapping());
+                showStatus(ok ? "Reset to defaults" : "Reset failed", !ok);
+            });
+        }).start();
+    }
+
+    @FXML
+    private void onSaveAsProfileClicked() {
+        if (protocol == null) return;
+        try {
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource(
+                            "/dev/juviscript/compassmeridian/save-profile-modal.fxml"
+                    )
+            );
+            Parent root = loader.load();
+            SaveProfileModalController controller = loader.getController();
+
+            Stage modal = new Stage();
+            modal.initStyle(StageStyle.UNDECORATED);
+            modal.initModality(Modality.APPLICATION_MODAL);
+
+            Scene scene = new Scene(root);
+            scene.getStylesheets().add(
+                    getClass().getResource(
+                            "/dev/juviscript/compassmeridian/styles.css"
+                    ).toExternalForm()
+            );
+
+            modal.setScene(scene);
+            controller.setup(modal, protocol, getCurrentMapping(), () ->
+                    Platform.runLater(this::loadProfiles)
+            );
+            modal.show();
+
+        } catch (IOException e) {
+            System.err.println("[mapping] Failed to open modal: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     @FXML
     private void onSaveProfileClicked() {
         if (newProfileNameField == null || protocol == null) return;
         String name = newProfileNameField.getText().trim();
-        if (name.isEmpty()) { showStatus("Please enter a profile name", true); return; }
+        if (name.isEmpty())     { showStatus("Please enter a profile name", true);      return; }
         if (name.length() > 32) { showStatus("Name too long (max 32 characters)", true); return; }
 
         saveProfileButton.setDisable(true);
@@ -133,60 +200,21 @@ public class MappingController {
     }
 
     @FXML
-    private void onSaveAsProfileClicked() {
-        if (protocol == null) return;
-
-        try {
-            FXMLLoader loader = new FXMLLoader(
-                    getClass().getResource(
-                            "/dev/juviscript/compassmeridian/save-profile-modal.fxml"
-                    )
-            );
-
-            Parent root = loader.load();
-            SaveProfileModalController controller = loader.getController();
-
-            Stage modal = new Stage();
-            modal.initStyle(StageStyle.UNDECORATED);
-            modal.initModality(Modality.APPLICATION_MODAL);
-
-            Scene scene = new Scene(root);
-            scene.getStylesheets().add(
-                    getClass().getResource(
-                            "/dev/juviscript/compassmeridian/styles.css"
-                    ).toExternalForm()
-            );
-
-            modal.setScene(scene);
-            controller.setup(modal, protocol, getCurrentMapping(), () -> {
-                Platform.runLater(this::loadProfiles);
-            });
-
-            modal.show();
-
-        } catch (IOException e) {
-            System.err.println("[mapping] Failed to open modal: " + e.getMessage());
-            e.printStackTrace();
-        }
+    private void onNewProfileKeyPressed(javafx.scene.input.KeyEvent e) {
+        if (e.getCode() == KeyCode.ENTER) onSaveProfileClicked();
     }
 
-    @FXML
-    private void onResetClicked() {
-        if (protocol == null) return;
-        new Thread(() -> {
-            boolean ok = protocol.reset();
-            Platform.runLater(() -> {
-                if (ok) applyMapping(new KeyMapping());
-                showStatus(ok ? "Reset to WASD" : "Reset failed", !ok);
-            });
-        }).start();
-    }
-
+    // ── Mapping helpers ───────────────────────────────────
     public void applyMapping(KeyMapping mapping) {
         upCombo.setValue(mapping.getUp());
         downCombo.setValue(mapping.getDown());
         leftCombo.setValue(mapping.getLeft());
         rightCombo.setValue(mapping.getRight());
+        clickCombo.setValue(mapping.getClick());
+        thresholdSlider.setValue(mapping.getThreshold());
+        diagonalSlider.setValue(mapping.getDiagonalThreshold());
+        thresholdLabel.setText(String.valueOf(mapping.getThreshold()));
+        diagonalLabel.setText(String.valueOf(mapping.getDiagonalThreshold()));
     }
 
     public KeyMapping getCurrentMapping() {
@@ -194,14 +222,16 @@ public class MappingController {
                 upCombo.getValue(),
                 downCombo.getValue(),
                 leftCombo.getValue(),
-                rightCombo.getValue()
+                rightCombo.getValue(),
+                clickCombo.getValue(),
+                (int) thresholdSlider.getValue(),
+                (int) diagonalSlider.getValue()
         );
     }
 
     // ── Profiles ──────────────────────────────────────────
     public void loadProfiles() {
         if (protocol == null) return;
-
         new Thread(() -> {
             List<Profile> profiles = protocol.getProfileList();
             Platform.runLater(() -> renderProfiles(profiles));
@@ -213,7 +243,6 @@ public class MappingController {
         customProfilesList.getChildren().clear();
 
         int customCount = 0;
-
         for (Profile p : profiles) {
             HBox row = buildProfileRow(p);
             if (p.isBuiltin()) {
@@ -237,7 +266,6 @@ public class MappingController {
         row.getStyleClass().add("profile-row");
         if (profile.isActive()) row.getStyleClass().add("profile-row-active");
 
-        // Name + type badge on same line
         HBox nameRow = new HBox(6);
         nameRow.setAlignment(Pos.CENTER_LEFT);
         HBox.setHgrow(nameRow, Priority.ALWAYS);
@@ -245,7 +273,6 @@ public class MappingController {
         Label nameLabel = new Label(profile.getDisplayName());
         nameLabel.getStyleClass().add("profile-name");
 
-        // Type badge — to the right of name
         Label typeBadge = new Label(profile.isBuiltin() ? "BUILT-IN" : "CUSTOM");
         typeBadge.getStyleClass().addAll("badge",
                 profile.isBuiltin() ? "badge-builtin" : "badge-custom");
@@ -253,14 +280,12 @@ public class MappingController {
         nameRow.getChildren().addAll(nameLabel, typeBadge);
         row.getChildren().add(nameRow);
 
-        // Active badge
         if (profile.isActive()) {
             Label activeBadge = new Label("ACTIVE");
             activeBadge.getStyleClass().addAll("badge", "badge-green");
             row.getChildren().add(activeBadge);
         }
 
-        // Load icon — only when not active
         if (!profile.isActive()) {
             Button loadBtn = new Button("▶");
             loadBtn.getStyleClass().addAll("icon-btn", "icon-btn-load");
@@ -270,7 +295,6 @@ public class MappingController {
             row.getChildren().add(loadBtn);
         }
 
-        // Delete icon — custom only
         if (!profile.isBuiltin()) {
             Button deleteBtn = new Button("✕");
             deleteBtn.getStyleClass().addAll("icon-btn", "icon-btn-delete");
@@ -283,11 +307,6 @@ public class MappingController {
         return row;
     }
 
-    @FXML
-    private void onNewProfileKeyPressed(javafx.scene.input.KeyEvent e) {
-        if (e.getCode() == KeyCode.ENTER) onSaveProfileClicked();
-    }
-
     private void onLoadProfile(Profile profile) {
         new Thread(() -> {
             boolean ok = protocol.loadProfile(profile.getFilename());
@@ -295,7 +314,6 @@ public class MappingController {
                 Platform.runLater(() -> showStatus("Failed to load profile", true));
                 return;
             }
-
             try { Thread.sleep(300); }
             catch (InterruptedException e) { Thread.currentThread().interrupt(); return; }
 
@@ -333,11 +351,18 @@ public class MappingController {
         });
     }
 
-    // ── Setters ───────────────────────────────────────────
+    // ── Helpers ───────────────────────────────────────────
+    private void showStatus(String message, boolean isError) {
+        if (saveProfileStatus == null) return;
+        saveProfileStatus.setText(message);
+        saveProfileStatus.setStyle(isError
+                ? "-fx-text-fill: #cc0000; -fx-font-size: 10px;"
+                : "-fx-text-fill: #00e676; -fx-font-size: 10px;");
+    }
+
     public void setProtocol(CompassProtocol protocol) {
         this.protocol = protocol;
         loadProfiles();
-
         new Thread(() -> {
             var mapping = protocol.getConfig();
             Platform.runLater(() -> applyMapping(mapping));

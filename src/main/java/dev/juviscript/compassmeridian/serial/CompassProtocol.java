@@ -27,16 +27,29 @@ public class CompassProtocol {
         List<String> lines = serial.sendCommand("GET_CONFIG");
         Map<String, String> map = parseKeyValue(lines);
         return new KeyMapping(
-                map.getOrDefault("up",    "w"),
-                map.getOrDefault("down",  "s"),
-                map.getOrDefault("left",  "a"),
-                map.getOrDefault("right", "d")
+                map.getOrDefault("up",                 "w"),
+                map.getOrDefault("down",               "s"),
+                map.getOrDefault("left",               "a"),
+                map.getOrDefault("right",              "d"),
+                map.getOrDefault("click",              "SPACE"),
+                parseIntSafe(map.getOrDefault("threshold",          "120"), 120),
+                parseIntSafe(map.getOrDefault("diagonal_threshold", "60"),   60)
         );
     }
 
     public boolean setKey(String direction, String key) {
         List<String> lines = serial.sendCommand("SET " + direction + " " + key);
         return lines.contains("OK");
+    }
+
+    public boolean setThreshold(int value) {
+        List<String> response = serial.sendCommand("SET_THRESHOLD main " + value);
+        return response.contains("OK");
+    }
+
+    public boolean setDiagonalThreshold(int value) {
+        List<String> response = serial.sendCommand("SET_THRESHOLD diagonal " + value);
+        return response.contains("OK");
     }
 
     public boolean save() {
@@ -95,6 +108,14 @@ public class CompassProtocol {
             }
         }
         return map;
+    }
+
+    private int parseIntSafe(String value, int defaultValue) {
+        try {
+            return Integer.parseInt(value.trim());
+        } catch (NumberFormatException e) {
+            return defaultValue;
+        }
     }
 
     public List<Profile> getProfileList() {
