@@ -5,15 +5,20 @@ import dev.juviscript.compassmeridian.MeridianApp;
 import dev.juviscript.compassmeridian.model.Profile;
 import dev.juviscript.compassmeridian.serial.CompassProtocol;
 import dev.juviscript.compassmeridian.serial.CompassSerial;
+import dev.juviscript.compassmeridian.utils.Logger;
 import dev.juviscript.compassmeridian.utils.UIUtils;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import java.io.IOException;
 import java.util.List;
@@ -25,6 +30,7 @@ public class MainController {
     @FXML private StackPane contentArea;
     @FXML private VBox navDevice;
     @FXML private VBox navMapping;
+    @FXML private VBox navAbout;
     @FXML private ImageView appIcon;
     @FXML private ImageView brandIcon;
 
@@ -57,7 +63,7 @@ public class MainController {
             );
             brandIcon.setImage(logo);
         } catch (Exception e) {
-            System.err.println("[ui] Could not load icon: " + e.getMessage());
+            Logger.error("ui", "Could not load icon: " + e.getMessage(), e);
         }
 
         UIUtils.addHoverFadeChildren(navDevice);
@@ -72,7 +78,7 @@ public class MainController {
     private void autoConnect() {
         new Thread(() -> {
             for (int attempt = 1; attempt <= 3; attempt++) {
-                System.out.println("[serial] Auto-connect attempt " + attempt);
+                Logger.info("serial", "Auto-connect attempt " + attempt);
                 SerialPort foundPort = CompassSerial.findCompass();
                 if (foundPort != null && serial.connect(foundPort)) {
                     onCompassConnected();
@@ -106,9 +112,9 @@ public class MainController {
             Map<String, String> info = protocol.getInfo();
             List<Profile> profiles   = protocol.getProfileList();
 
-            int totalProfiles        = profiles.size();
-            String activeProfile     = info.getOrDefault("active_profile", "");
-            String serialNumber      = info.getOrDefault("serial", "—");
+            int totalProfiles    = profiles.size();
+            String activeProfile = info.getOrDefault("active_profile", "");
+            String serialNumber  = info.getOrDefault("serial", "—");
 
             String activeDisplayName = profiles.stream()
                     .filter(p -> p.getFilename().equals(activeProfile))
@@ -140,7 +146,7 @@ public class MainController {
             if (deviceController != null) {
                 deviceController.setConnectedState(false);
             }
-            System.out.println("[ui] Compass disconnected");
+            Logger.info("ui", "Compass disconnected");
         });
     }
 
@@ -165,6 +171,37 @@ public class MainController {
     // ── Navigation ────────────────────────────────────────
     @FXML private void onNavDevice()  { setActiveNav(navDevice);  loadPage("device-page.fxml"); }
     @FXML private void onNavMapping() { setActiveNav(navMapping); loadPage("mapping-page.fxml"); }
+
+    @FXML
+    private void onNavAbout() {
+        try {
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource(
+                            "/dev/juviscript/compassmeridian/about-modal.fxml"
+                    )
+            );
+            Parent root = loader.load();
+            AboutController controller = loader.getController();
+
+            Stage modal = new Stage();
+            modal.initStyle(StageStyle.UNDECORATED);
+            modal.initModality(Modality.APPLICATION_MODAL);
+
+            Scene scene = new Scene(root);
+            scene.getStylesheets().add(
+                    getClass().getResource(
+                            "/dev/juviscript/compassmeridian/styles.css"
+                    ).toExternalForm()
+            );
+
+            modal.setScene(scene);
+            controller.setStage(modal);
+            modal.show();
+
+        } catch (IOException e) {
+            Logger.error("ui", "Failed to open about modal: " + e.getMessage(), e);
+        }
+    }
 
     private void setActiveNav(VBox selected) {
         if (currentNav != null) {
@@ -225,8 +262,7 @@ public class MainController {
             UIUtils.fadeIn(page, 200);
             contentArea.getChildren().setAll(page);
         } catch (IOException e) {
-            System.err.println("[ui] Failed to load page: " + fxmlPath);
-            e.printStackTrace();
+            Logger.error("ui", "Failed to load page: " + fxmlPath, e);
         }
     }
 

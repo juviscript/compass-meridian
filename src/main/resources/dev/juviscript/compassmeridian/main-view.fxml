@@ -42,6 +42,7 @@
     <left>
         <VBox styleClass="sidebar" prefWidth="125" spacing="4">
             <VBox styleClass="sidebar-inner" VBox.vgrow="ALWAYS" maxHeight="Infinity">
+
                 <!-- Logo -->
                 <VBox styleClass="sidebar-logo" alignment="CENTER">
                     <ImageView fx:id="brandIcon" fitWidth="65" fitHeight="65"
@@ -49,20 +50,29 @@
                 </VBox>
 
                 <!-- Nav items -->
-                    <!-- Device -->
-                    <VBox fx:id="navDevice" styleClass="nav-item" onMouseClicked="#onNavDevice">
-                        <Label text="⬡" styleClass="nav-icon"/>
-                        <Label text="DEVICE" styleClass="nav-label"/>
-                    </VBox>
+                <VBox fx:id="navDevice" styleClass="nav-item" onMouseClicked="#onNavDevice">
+                    <Label text="⬡" styleClass="nav-icon"/>
+                    <Label text="DEVICE" styleClass="nav-label"/>
+                </VBox>
 
-                    <!-- Mapping -->
-                    <VBox fx:id="navMapping" styleClass="nav-item" onMouseClicked="#onNavMapping">
-                        <Label text="⌨" styleClass="nav-icon"/>
-                        <Label text="MAPPING" styleClass="nav-label"/>
-                    </VBox>
+                <VBox fx:id="navMapping" styleClass="nav-item" onMouseClicked="#onNavMapping">
+                    <Label text="⌨" styleClass="nav-icon"/>
+                    <Label text="MAPPING" styleClass="nav-label"/>
+                </VBox>
+
+                <!-- Spacer pushes about button to bottom -->
+                <Region VBox.vgrow="ALWAYS"/>
+
+                <!-- About button -->
+                <VBox fx:id="navAbout" styleClass="nav-item" onMouseClicked="#onNavAbout"
+                      alignment="CENTER" style="-fx-padding: 8 0 8 0;">
+                    <Label text="ⓘ" styleClass="nav-icon"
+                           style="-fx-font-size: 16px;"/>
+                    <Label text="ABOUT" styleClass="nav-label"/>
+                </VBox>
+
             </VBox>
         </VBox>
-
     </left>
 
     <!-- Main content area -->

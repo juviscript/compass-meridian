@@ -1,5 +1,6 @@
 package dev.juviscript.compassmeridian;
 
+import dev.juviscript.compassmeridian.utils.Logger;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -16,12 +17,11 @@ public class MeridianApp extends Application {
 
     private void setupSystemTray(Stage stage) {
         if (!java.awt.SystemTray.isSupported()) {
-            System.err.println("[tray] System tray not supported");
+            Logger.warn("tray", "System tray not supported");
             return;
         }
 
         try {
-            // Load icon for tray.
             java.awt.image.BufferedImage trayIcon = javax.imageio.ImageIO.read(
                     MeridianApp.class.getResourceAsStream(
                             "/dev/juviscript/compassmeridian/assets/icon.png"
@@ -47,28 +47,23 @@ public class MeridianApp extends Application {
 
             java.awt.TrayIcon icon = new java.awt.TrayIcon(trayIcon, "Meridian", popup);
             icon.setImageAutoSize(true);
-
-            // Double click tray icon to show window
             icon.addActionListener(e -> Platform.runLater(stage::show));
 
             java.awt.SystemTray.getSystemTray().add(icon);
 
-            // Hide to tray instead of closing
             stage.setOnCloseRequest(e -> {
                 e.consume();
                 stage.hide();
             });
 
         } catch (Exception e) {
-            System.err.println("[tray] Failed to setup tray: " + e.getMessage());
+            Logger.error("tray", "Failed to setup tray: " + e.getMessage(), e);
         }
     }
 
     @Override
     public void start(Stage stage) throws IOException {
-
         try {
-
             primaryStage = stage;
 
             FXMLLoader fxmlLoader = new FXMLLoader(
@@ -93,24 +88,14 @@ public class MeridianApp extends Application {
                         ))
                 );
             } catch (Exception e) {
-                System.err.println("[app] Could not load icon: " + e.getMessage());
+                Logger.error("app", "Could not load icon: " + e.getMessage(), e);
             }
 
             stage.show();
             setupSystemTray(stage);
 
-        } catch(Exception e) {
-            try {
-                java.io.File logFile = new java.io.File(
-                        System.getProperty("user.home") + "/meridian-error.log"
-                );
-                java.io.PrintWriter pw = new java.io.PrintWriter(
-                        new java.io.FileWriter(logFile, true)
-                );
-                pw.println(new java.util.Date());
-                e.printStackTrace(pw);
-                pw.close();
-            } catch (Exception ignored) {}
+        } catch (Exception e) {
+            Logger.error("app", "Fatal error during startup: " + e.getMessage(), e);
             throw e;
         }
     }
@@ -121,26 +106,18 @@ public class MeridianApp extends Application {
 
     @Override
     public void stop() {
-        // Cleanup on close — will wire to serial disconnect later
-        System.out.println("[app] Shutting down");
+        Logger.info("app", "Meridian shutting down");
     }
 
-
-
     public static void main(String[] args) {
-        Thread.setDefaultUncaughtExceptionHandler((thread, throwable) -> {
-            try {
-                java.io.File logFile = new java.io.File(
-                        System.getProperty("user.home") + "/meridian-error.log"
-                );
-                java.io.PrintWriter pw = new java.io.PrintWriter(
-                        new java.io.FileWriter(logFile, true)
-                );
-                pw.println(new java.util.Date());
-                throwable.printStackTrace(pw);
-                pw.close();
-            } catch (Exception ignored) {}
-        });
+        // Initialize logger before anything else
+        Logger.init();
+
+        // Catch uncaught exceptions on any thread
+        Thread.setDefaultUncaughtExceptionHandler((thread, throwable) ->
+                Logger.error("uncaught", "Uncaught exception on thread ["
+                        + thread.getName() + "]: " + throwable.getMessage(), throwable)
+        );
 
         launch();
     }
