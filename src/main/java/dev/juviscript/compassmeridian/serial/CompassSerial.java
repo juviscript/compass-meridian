@@ -12,17 +12,20 @@ import java.util.List;
 
 public class CompassSerial {
 
-    private static final int BAUD_RATE        = 115200;
-    private static final int TIMEOUT_MS       = 2000;
-    private static final int POLL_INTERVAL_MS = 2000;
-    private static final int RECONNECT_DELAY_MS = 3000; // cooldown after disconnect
+    private static final int BAUD_RATE          = 115200;
+    private static final int TIMEOUT_MS         = 2000;
+    private static final int POLL_INTERVAL_MS   = 2000;
+    private static final int RECONNECT_DELAY_MS = 3000;
+
+    // Serial number prefix that identifies a Klutch Gaming Compass
+    private static final String KG_SERIAL_PREFIX = "KG-";
 
     private SerialPort port;
     private BufferedReader reader;
     private OutputStream writer;
-    private volatile boolean connected = false;
+    private volatile boolean connected           = false;
     private volatile boolean hotplugListenerRunning = false;
-    private volatile long lastDisconnectTime = 0;
+    private volatile long lastDisconnectTime     = 0;
 
     // ── Getters ───────────────────────────────────────────
 
@@ -45,14 +48,25 @@ public class CompassSerial {
             System.out.println("[serial] Scanning: " + p.getSystemPortName()
                     + " | " + p.getPortDescription()
                     + " | VID: " + Integer.toHexString(p.getVendorID()).toUpperCase()
-                    + " | PID: " + Integer.toHexString(p.getProductID()).toUpperCase());
+                    + " | PID: " + Integer.toHexString(p.getProductID()).toUpperCase()
+                    + " | Serial: " + p.getSerialNumber());
 
+            // Primary — match on KG- serial number prefix
+            String serial = p.getSerialNumber();
+            if (serial != null && serial.startsWith(KG_SERIAL_PREFIX)) {
+                System.out.println("[serial] Found Compass by serial number: "
+                        + serial + " on " + p.getSystemPortName());
+                return p;
+            }
+
+            // Fallback — match on VID or description for older firmware
             String desc = p.getPortDescription().toUpperCase();
             if (p.getVendorID() == 0x2E8A
                     || desc.contains("PICO")
                     || desc.contains("COMPASS")
                     || desc.contains("RP2040")) {
-                System.out.println("[serial] Found Compass on " + p.getSystemPortName());
+                System.out.println("[serial] Found Compass by VID/description on "
+                        + p.getSystemPortName());
                 return p;
             }
         }
@@ -113,7 +127,7 @@ public class CompassSerial {
                         SerialPort.LISTENING_EVENT_PORT_DISCONNECTED) {
                     if (!connected) return;
                     System.out.println("[serial] Compass disconnected");
-                    disconnect(); // ← call full disconnect instead of just setting flag
+                    disconnect();
                     onDisconnect.run();
                 }
             }
@@ -122,10 +136,6 @@ public class CompassSerial {
 
     // ── Synchronous send/receive ──────────────────────────
 
-    /**
-     * Send a command and return the response lines up to
-     * "END", "OK", "SAVED", "RESET", or "ERROR".
-     */
     private final Object serialLock = new Object();
 
     public List<String> sendCommand(String command) {
@@ -167,29 +177,16 @@ public class CompassSerial {
 
     // ── Hotplug detection ─────────────────────────────────
 
-    /**
-     * Starts listening for Compass connect/disconnect events.
-     *
-     * Disconnect is detected via jSerialComm's PORT_DISCONNECTED event.
-     * Connect is detected by polling for new ports every 2 seconds
-     * since jSerialComm has no native hotplug listener.
-     *
-     * @param onConnect    called when a Compass is detected and connected
-     * @param onDisconnect called when the Compass is unplugged
-     */
     public void startHotplugListener(Runnable onConnect, Runnable onDisconnect) {
 
-        // Attach disconnect listener to current port if open
         attachDisconnectListener(onDisconnect);
 
-        // Only start one polling thread
         if (hotplugListenerRunning) return;
         hotplugListenerRunning = true;
 
         Thread hotplugThread = new Thread(() -> {
             while (true) {
                 if (!connected) {
-                    // Cooldown after disconnect — wait for board to finish rebooting
                     long timeSinceDisconnect = System.currentTimeMillis() - lastDisconnectTime;
                     if (timeSinceDisconnect < RECONNECT_DELAY_MS) {
                         System.out.println("[serial] Cooldown — waiting for board to reboot");

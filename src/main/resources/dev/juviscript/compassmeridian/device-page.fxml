@@ -110,25 +110,30 @@
                     <ColumnConstraints hgrow="ALWAYS"/>
                 </columnConstraints>
 
-                <Label text="Device ID" styleClass="stat-label"
+                <Label text="Serial" styleClass="stat-label"
                        GridPane.rowIndex="0" GridPane.columnIndex="0"/>
-                <Label text="compass-rp2040" styleClass="value"
+                <Label fx:id="serialLabel" text="—" styleClass="value"
                        GridPane.rowIndex="0" GridPane.columnIndex="1"/>
 
-                <Label text="Manufacturer" styleClass="stat-label"
+                <Label text="Device ID" styleClass="stat-label"
                        GridPane.rowIndex="1" GridPane.columnIndex="0"/>
-                <Label text="Klutch Gaming" styleClass="value"
+                <Label text="compass-rp2040" styleClass="value"
                        GridPane.rowIndex="1" GridPane.columnIndex="1"/>
 
-                <Label text="Build Date" styleClass="stat-label"
+                <Label text="Manufacturer" styleClass="stat-label"
                        GridPane.rowIndex="2" GridPane.columnIndex="0"/>
-                <Label fx:id="buildDateLabel" text="—" styleClass="value"
+                <Label text="Klutch Gaming" styleClass="value"
                        GridPane.rowIndex="2" GridPane.columnIndex="1"/>
 
-                <Label text="Port" styleClass="stat-label"
+                <Label text="Build Date" styleClass="stat-label"
                        GridPane.rowIndex="3" GridPane.columnIndex="0"/>
-                <Label fx:id="portLabel" text="—" styleClass="value"
+                <Label fx:id="buildDateLabel" text="—" styleClass="value"
                        GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+
+                <Label text="Port" styleClass="stat-label"
+                       GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+                <Label fx:id="portLabel" text="—" styleClass="value"
+                       GridPane.rowIndex="4" GridPane.columnIndex="1"/>
             </GridPane>
         </VBox>
 

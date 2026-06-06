@@ -102,16 +102,14 @@ public class MainController {
             }
         });
 
-        // Fetch device info + profiles sequentially on background thread
         new Thread(() -> {
             Map<String, String> info = protocol.getInfo();
             List<Profile> profiles   = protocol.getProfileList();
 
-            // Count totals
-            int totalProfiles    = profiles.size();
-            String activeProfile = info.getOrDefault("active_profile", "");
+            int totalProfiles        = profiles.size();
+            String activeProfile     = info.getOrDefault("active_profile", "");
+            String serialNumber      = info.getOrDefault("serial", "—");
 
-            // Find display name for active profile
             String activeDisplayName = profiles.stream()
                     .filter(p -> p.getFilename().equals(activeProfile))
                     .map(Profile::getDisplayName)
@@ -127,7 +125,8 @@ public class MainController {
                             serial.getPortName(),
                             info.getOrDefault("built", "—"),
                             activeDisplayName,
-                            totalProfiles
+                            totalProfiles,
+                            serialNumber
                     );
                 }
             });
@@ -189,13 +188,13 @@ public class MainController {
                 deviceController.setProtocol(protocol);
                 deviceController.setConnectedState(connected);
 
-                // Re-fetch and populate device info if already connected
                 if (connected && protocol != null) {
                     new Thread(() -> {
                         Map<String, String> info   = protocol.getInfo();
                         List<Profile> profiles     = protocol.getProfileList();
                         int totalProfiles          = profiles.size();
                         String activeProfile       = info.getOrDefault("active_profile", "");
+                        String serialNumber        = info.getOrDefault("serial", "—");
                         String activeDisplayName   = profiles.stream()
                                 .filter(p -> p.getFilename().equals(activeProfile))
                                 .map(Profile::getDisplayName)
@@ -209,7 +208,8 @@ public class MainController {
                                 serial.getPortName(),
                                 info.getOrDefault("built", "—"),
                                 activeDisplayName,
-                                totalProfiles
+                                totalProfiles,
+                                serialNumber
                         ));
                     }).start();
                 }

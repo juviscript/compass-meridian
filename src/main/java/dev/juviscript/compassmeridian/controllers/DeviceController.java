@@ -33,6 +33,7 @@ public class DeviceController {
     @FXML private Label editNameIcon;
     @FXML private Label activeProfileLabel;
     @FXML private Label totalProfilesLabel;
+    @FXML private Label serialLabel;
 
     private boolean editMode = false;
     private CompassProtocol protocol;
@@ -139,22 +140,19 @@ public class DeviceController {
         );
         restartButton.setDisable(!isConnected);
 
-        // Show/hide placeholder image
         deviceImageContainer.setVisible(isConnected);
         deviceImageContainer.setManaged(isConnected);
 
-        // Show/hide edit icon
         editNameIcon.setVisible(isConnected);
         editNameIcon.setManaged(isConnected);
 
-        // If disconnected mid-edit, exit edit mode
         if (!isConnected && editMode) exitEditMode();
 
-        // Reset labels when disconnected
         if (!isConnected) {
             deviceNameLabel.setText("Compass Not Detected");
             activeProfileLabel.setText("--");
             totalProfilesLabel.setText("--");
+            serialLabel.setText("—");
         }
 
         VBox parent = (VBox) restartButton.getParent();
@@ -169,7 +167,7 @@ public class DeviceController {
     public void updateDeviceInfo(String name, String version,
                                  String hwRev, String port,
                                  String buildDate, String activeProfile,
-                                 int totalProfiles) {
+                                 int totalProfiles, String serial) {
         deviceNameLabel.setText(name);
         hwRevLabel.setText(hwRev);
         portLabel.setText(port);
@@ -177,6 +175,7 @@ public class DeviceController {
         installedVersion.setText("v" + version);
         activeProfileLabel.setText(activeProfile.isEmpty() ? "--" : activeProfile);
         totalProfilesLabel.setText(String.valueOf(totalProfiles));
+        serialLabel.setText(serial.isEmpty() ? "—" : serial);
     }
 
     // ── Actions ───────────────────────────────────────────

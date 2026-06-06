@@ -66,35 +66,53 @@ public class MeridianApp extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        primaryStage = stage;
-
-        FXMLLoader fxmlLoader = new FXMLLoader(
-                MeridianApp.class.getResource("main-view.fxml")
-        );
-
-        Scene scene = new Scene(fxmlLoader.load());
-        scene.getStylesheets().add(
-                MeridianApp.class.getResource("styles.css").toExternalForm()
-        );
-
-        stage.initStyle(StageStyle.UNDECORATED);
-        stage.setTitle("Meridian");
-        stage.setScene(scene);
-        stage.setMinWidth(900);
-        stage.setMinHeight(620);
 
         try {
-            stage.getIcons().add(
-                    new Image(MeridianApp.class.getResourceAsStream(
-                            "/dev/juviscript/compassmeridian/assets/icon.png"
-                    ))
-            );
-        } catch (Exception e) {
-            System.err.println("[app] Could not load icon: " + e.getMessage());
-        }
 
-        stage.show();
-        setupSystemTray(stage);
+            primaryStage = stage;
+
+            FXMLLoader fxmlLoader = new FXMLLoader(
+                    MeridianApp.class.getResource("main-view.fxml")
+            );
+
+            Scene scene = new Scene(fxmlLoader.load());
+            scene.getStylesheets().add(
+                    MeridianApp.class.getResource("styles.css").toExternalForm()
+            );
+
+            stage.initStyle(StageStyle.UNDECORATED);
+            stage.setTitle("Meridian");
+            stage.setScene(scene);
+            stage.setMinWidth(900);
+            stage.setMinHeight(620);
+
+            try {
+                stage.getIcons().add(
+                        new Image(MeridianApp.class.getResourceAsStream(
+                                "/dev/juviscript/compassmeridian/assets/icon.png"
+                        ))
+                );
+            } catch (Exception e) {
+                System.err.println("[app] Could not load icon: " + e.getMessage());
+            }
+
+            stage.show();
+            setupSystemTray(stage);
+
+        } catch(Exception e) {
+            try {
+                java.io.File logFile = new java.io.File(
+                        System.getProperty("user.home") + "/meridian-error.log"
+                );
+                java.io.PrintWriter pw = new java.io.PrintWriter(
+                        new java.io.FileWriter(logFile, true)
+                );
+                pw.println(new java.util.Date());
+                e.printStackTrace(pw);
+                pw.close();
+            } catch (Exception ignored) {}
+            throw e;
+        }
     }
 
     public static Stage getPrimaryStage() {
@@ -110,6 +128,20 @@ public class MeridianApp extends Application {
 
 
     public static void main(String[] args) {
+        Thread.setDefaultUncaughtExceptionHandler((thread, throwable) -> {
+            try {
+                java.io.File logFile = new java.io.File(
+                        System.getProperty("user.home") + "/meridian-error.log"
+                );
+                java.io.PrintWriter pw = new java.io.PrintWriter(
+                        new java.io.FileWriter(logFile, true)
+                );
+                pw.println(new java.util.Date());
+                throwable.printStackTrace(pw);
+                pw.close();
+            } catch (Exception ignored) {}
+        });
+
         launch();
     }
 }
