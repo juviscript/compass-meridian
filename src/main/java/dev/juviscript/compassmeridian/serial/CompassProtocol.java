@@ -27,13 +27,13 @@ public class CompassProtocol {
         List<String> lines = serial.sendCommand("GET_CONFIG");
         Map<String, String> map = parseKeyValue(lines);
         return new KeyMapping(
-                map.getOrDefault("up",                 "w"),
-                map.getOrDefault("down",               "s"),
-                map.getOrDefault("left",               "a"),
-                map.getOrDefault("right",              "d"),
-                map.getOrDefault("click",              "SPACE"),
-                parseIntSafe(map.getOrDefault("threshold",          "120"), 120),
-                parseIntSafe(map.getOrDefault("diagonal_threshold", "60"),   60)
+                map.getOrDefault("up",                "w"),
+                map.getOrDefault("down",              "s"),
+                map.getOrDefault("left",              "a"),
+                map.getOrDefault("right",             "d"),
+                map.getOrDefault("click",             "SPACE"),
+                parseIntSafe(map.getOrDefault("deadzone",          "120"), 120),
+                parseIntSafe(map.getOrDefault("diagonal_deadzone", "60"),   60)
         );
     }
 
@@ -42,13 +42,13 @@ public class CompassProtocol {
         return lines.contains("OK");
     }
 
-    public boolean setThreshold(int value) {
-        List<String> response = serial.sendCommand("SET_THRESHOLD main " + value);
+    public boolean setDeadzone(int value) {
+        List<String> response = serial.sendCommand("SET_DEADZONE main " + value);
         return response.contains("OK");
     }
 
-    public boolean setDiagonalThreshold(int value) {
-        List<String> response = serial.sendCommand("SET_THRESHOLD diagonal " + value);
+    public boolean setDiagonalDeadzone(int value) {
+        List<String> response = serial.sendCommand("SET_DEADZONE diagonal " + value);
         return response.contains("OK");
     }
 

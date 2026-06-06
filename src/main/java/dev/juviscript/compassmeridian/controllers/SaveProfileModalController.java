@@ -19,8 +19,8 @@ public class SaveProfileModalController {
     @FXML private Label previewLeft;
     @FXML private Label previewRight;
     @FXML private Label previewClick;
-    @FXML private Label previewThreshold;
-    @FXML private Label previewDiagonal;
+    @FXML private Label previewDeadzone;
+    @FXML private Label previewDiagonalDeadzone;
     @FXML private Button saveButton;
 
     private Stage stage;
@@ -45,8 +45,8 @@ public class SaveProfileModalController {
         previewLeft.setText(mapping.getLeft());
         previewRight.setText(mapping.getRight());
         previewClick.setText(mapping.getClick());
-        previewThreshold.setText(String.valueOf(mapping.getThreshold()));
-        previewDiagonal.setText(String.valueOf(mapping.getDiagonalThreshold()));
+        previewDeadzone.setText(String.valueOf(mapping.getDeadzone()));
+        previewDiagonalDeadzone.setText(String.valueOf(mapping.getDiagonalDeadzone()));
 
         profileNameField.requestFocus();
     }
@@ -102,8 +102,8 @@ public class SaveProfileModalController {
             ok &= protocol.setKey("left",  mapping.getLeft());
             ok &= protocol.setKey("right", mapping.getRight());
             ok &= protocol.setKey("click", mapping.getClick());
-            ok &= protocol.setThreshold(mapping.getThreshold());
-            ok &= protocol.setDiagonalThreshold(mapping.getDiagonalThreshold());
+            ok &= protocol.setDeadzone(mapping.getDeadzone());
+            ok &= protocol.setDiagonalDeadzone(mapping.getDiagonalDeadzone());
 
             // Save as named profile
             if (ok) ok = protocol.saveProfile(name);

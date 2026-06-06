@@ -70,14 +70,14 @@
                 <Label fx:id="previewClick" text="SPACE" styleClass="preview-value"
                        GridPane.rowIndex="2" GridPane.columnIndex="1"/>
 
-                <Label text="Directional" styleClass="dpad-label"
+                <Label text="Deadzone" styleClass="dpad-label"
                        GridPane.rowIndex="3" GridPane.columnIndex="0"/>
-                <Label fx:id="previewThreshold" text="120" styleClass="preview-value"
+                <Label fx:id="previewDeadzone" text="120" styleClass="preview-value"
                        GridPane.rowIndex="3" GridPane.columnIndex="1"/>
 
-                <Label text="Diagonal" styleClass="dpad-label"
+                <Label text="Diag. DZ" styleClass="dpad-label"
                        GridPane.rowIndex="3" GridPane.columnIndex="2"/>
-                <Label fx:id="previewDiagonal" text="60" styleClass="preview-value"
+                <Label fx:id="previewDiagonalDeadzone" text="60" styleClass="preview-value"
                        GridPane.rowIndex="3" GridPane.columnIndex="3"/>
 
             </GridPane>

@@ -32,7 +32,7 @@ public class MappingController {
     @FXML private Button saveButton;
     @FXML private Button resetButton;
 
-    // ── Sensitivity bindings ──────────────────────────────
+    // ── Deadzone bindings ─────────────────────────────────
     @FXML private Slider thresholdSlider;
     @FXML private Slider diagonalSlider;
     @FXML private Label thresholdLabel;
@@ -47,6 +47,13 @@ public class MappingController {
     @FXML private Label customCountLabel;
     @FXML private Label noCustomLabel;
     @FXML private Button saveAsProfileButton;
+
+    // ── Deadzone slider config ────────────────────────────
+    // Sliders are inverted: left = less sensitive (high deadzone), right = more sensitive (low deadzone)
+    private static final int DZ_MIN      = 50;   // most sensitive
+    private static final int DZ_MAX      = 150;  // least sensitive
+    private static final int DZ_DIAG_MIN = 30;   // most sensitive
+    private static final int DZ_DIAG_MAX = 100;  // least sensitive
 
     // ── State ─────────────────────────────────────────────
     private CompassProtocol protocol;
@@ -80,18 +87,36 @@ public class MappingController {
         rightCombo.setValue("d");
         clickCombo.setValue("SPACE");
 
-        // Slider listeners
-        thresholdSlider.valueProperty().addListener((obs, oldVal, newVal) ->
-                thresholdLabel.setText(String.valueOf(newVal.intValue()))
-        );
-        diagonalSlider.valueProperty().addListener((obs, oldVal, newVal) ->
-                diagonalLabel.setText(String.valueOf(newVal.intValue()))
-        );
+        // Slider listeners — invert slider position to deadzone value
+        // Slider left = high deadzone (less sensitive), right = low deadzone (more sensitive)
+        thresholdSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
+            int deadzone = sliderToDeadzone(newVal.intValue(), DZ_MIN, DZ_MAX);
+            thresholdLabel.setText(String.valueOf(deadzone));
+        });
+
+        diagonalSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
+            int deadzone = sliderToDeadzone(newVal.intValue(), DZ_DIAG_MIN, DZ_DIAG_MAX);
+            diagonalLabel.setText(String.valueOf(deadzone));
+        });
 
         if (saveButton != null)          { UIUtils.addHoverFade(saveButton);          UIUtils.addClickPulse(saveButton); }
         if (resetButton != null)         { UIUtils.addHoverFade(resetButton);         UIUtils.addClickPulse(resetButton); }
         if (saveProfileButton != null)   { UIUtils.addHoverFade(saveProfileButton);   UIUtils.addClickPulse(saveProfileButton); }
         if (saveAsProfileButton != null) { UIUtils.addHoverFade(saveAsProfileButton); UIUtils.addClickPulse(saveAsProfileButton); }
+    }
+
+    // ── Slider inversion helpers ──────────────────────────
+
+    // Slider position → deadzone value (inverted)
+    // Slider at min (left) = max deadzone (least sensitive)
+    // Slider at max (right) = min deadzone (most sensitive)
+    private int sliderToDeadzone(int sliderValue, int dzMin, int dzMax) {
+        return dzMax - sliderValue + dzMin;
+    }
+
+    // Deadzone value → slider position (inverted)
+    private int deadzoneToSlider(int deadzone, int dzMin, int dzMax) {
+        return dzMax - deadzone + dzMin;
     }
 
     // ── Key mapping ───────────────────────────────────────
@@ -106,8 +131,10 @@ public class MappingController {
         String left  = leftCombo.getValue();
         String right = rightCombo.getValue();
         String click = clickCombo.getValue();
-        int threshold = (int) thresholdSlider.getValue();
-        int diagonal  = (int) diagonalSlider.getValue();
+
+        // Convert slider positions back to deadzone values
+        int deadzone         = sliderToDeadzone((int) thresholdSlider.getValue(), DZ_MIN, DZ_MAX);
+        int diagonalDeadzone = sliderToDeadzone((int) diagonalSlider.getValue(), DZ_DIAG_MIN, DZ_DIAG_MAX);
 
         new Thread(() -> {
             boolean ok = true;
@@ -116,8 +143,8 @@ public class MappingController {
             ok &= protocol.setKey("left",  left);
             ok &= protocol.setKey("right", right);
             ok &= protocol.setKey("click", click);
-            ok &= protocol.setThreshold(threshold);
-            ok &= protocol.setDiagonalThreshold(diagonal);
+            ok &= protocol.setDeadzone(deadzone);
+            ok &= protocol.setDiagonalDeadzone(diagonalDeadzone);
             boolean saved = protocol.save();
 
             boolean success = ok && saved;
@@ -178,7 +205,7 @@ public class MappingController {
     private void onSaveProfileClicked() {
         if (newProfileNameField == null || protocol == null) return;
         String name = newProfileNameField.getText().trim();
-        if (name.isEmpty())     { showStatus("Please enter a profile name", true);      return; }
+        if (name.isEmpty())     { showStatus("Please enter a profile name", true);       return; }
         if (name.length() > 32) { showStatus("Name too long (max 32 characters)", true); return; }
 
         saveProfileButton.setDisable(true);
@@ -211,10 +238,15 @@ public class MappingController {
         leftCombo.setValue(mapping.getLeft());
         rightCombo.setValue(mapping.getRight());
         clickCombo.setValue(mapping.getClick());
-        thresholdSlider.setValue(mapping.getThreshold());
-        diagonalSlider.setValue(mapping.getDiagonalThreshold());
-        thresholdLabel.setText(String.valueOf(mapping.getThreshold()));
-        diagonalLabel.setText(String.valueOf(mapping.getDiagonalThreshold()));
+
+        // Convert deadzone values to inverted slider positions
+        int dzSlider     = deadzoneToSlider(mapping.getDeadzone(), DZ_MIN, DZ_MAX);
+        int diagDzSlider = deadzoneToSlider(mapping.getDiagonalDeadzone(), DZ_DIAG_MIN, DZ_DIAG_MAX);
+
+        thresholdSlider.setValue(dzSlider);
+        diagonalSlider.setValue(diagDzSlider);
+        thresholdLabel.setText(String.valueOf(mapping.getDeadzone()));
+        diagonalLabel.setText(String.valueOf(mapping.getDiagonalDeadzone()));
     }
 
     public KeyMapping getCurrentMapping() {
@@ -224,8 +256,8 @@ public class MappingController {
                 leftCombo.getValue(),
                 rightCombo.getValue(),
                 clickCombo.getValue(),
-                (int) thresholdSlider.getValue(),
-                (int) diagonalSlider.getValue()
+                sliderToDeadzone((int) thresholdSlider.getValue(), DZ_MIN, DZ_MAX),
+                sliderToDeadzone((int) diagonalSlider.getValue(), DZ_DIAG_MIN, DZ_DIAG_MAX)
         );
     }
 

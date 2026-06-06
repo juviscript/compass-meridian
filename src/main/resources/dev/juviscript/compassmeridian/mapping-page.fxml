@@ -68,28 +68,33 @@
 
             <Separator/>
 
-            <!-- Sensitivity -->
+            <!-- Deadzone -->
             <VBox spacing="10">
-                <Label text="SENSITIVITY" styleClass="card-title"/>
+                <Label text="DEADZONE" styleClass="card-title"/>
+                <Label text="← Less sensitive    More sensitive →"
+                       styleClass="stat-label"
+                       style="-fx-font-size: 9px; -fx-text-fill: #646d7a;"/>
 
-                <!-- Main threshold -->
+                <!-- Directional deadzone -->
                 <HBox spacing="8" alignment="CENTER_LEFT">
                     <Label text="Directional" styleClass="stat-label"
                            style="-fx-min-width: 80px;"/>
-                    <Slider fx:id="thresholdSlider" min="10" max="500"
-                            value="120" HBox.hgrow="ALWAYS" maxWidth="Infinity"
+                    <Slider fx:id="thresholdSlider" min="50" max="150"
+                            value="30"
+                            HBox.hgrow="ALWAYS" maxWidth="Infinity"
                             showTickMarks="false" styleClass="sensitivity-slider"/>
                     <Label fx:id="thresholdLabel" text="120"
                            styleClass="value"
                            style="-fx-min-width: 32px; -fx-font-size: 11px;"/>
                 </HBox>
 
-                <!-- Diagonal threshold -->
+                <!-- Diagonal deadzone -->
                 <HBox spacing="8" alignment="CENTER_LEFT">
                     <Label text="Diagonal" styleClass="stat-label"
                            style="-fx-min-width: 80px;"/>
-                    <Slider fx:id="diagonalSlider" min="10" max="500"
-                            value="60" HBox.hgrow="ALWAYS" maxWidth="Infinity"
+                    <Slider fx:id="diagonalSlider" min="30" max="100"
+                            value="40"
+                            HBox.hgrow="ALWAYS" maxWidth="Infinity"
                             showTickMarks="false" styleClass="sensitivity-slider"/>
                     <Label fx:id="diagonalLabel" text="60"
                            styleClass="value"
