@@ -34,9 +34,15 @@ public class DeviceController {
     @FXML private Label activeProfileLabel;
     @FXML private Label totalProfilesLabel;
     @FXML private Label serialLabel;
+    @FXML private VBox deviceInfoContent;
+    @FXML private VBox firmwareContent;
+    @FXML private Label deviceInfoToggle;
+    @FXML private Label firmwareToggle;
 
     private boolean editMode = false;
     private CompassProtocol protocol;
+    private boolean deviceInfoExpanded = true;
+    private boolean firmwareExpanded   = true;
 
     // ── Init ──────────────────────────────────────────────
     @FXML
@@ -213,6 +219,22 @@ public class DeviceController {
         } else {
             enterEditMode();
         }
+    }
+
+    @FXML
+    private void onToggleDeviceInfo() {
+        deviceInfoExpanded = !deviceInfoExpanded;
+        deviceInfoContent.setVisible(deviceInfoExpanded);
+        deviceInfoContent.setManaged(deviceInfoExpanded);
+        deviceInfoToggle.setText(deviceInfoExpanded ? "▾" : "▸");
+    }
+
+    @FXML
+    private void onToggleFirmware() {
+        firmwareExpanded = !firmwareExpanded;
+        firmwareContent.setVisible(firmwareExpanded);
+        firmwareContent.setManaged(firmwareExpanded);
+        firmwareToggle.setText(firmwareExpanded ? "▾" : "▸");
     }
 
     // ── Setters ───────────────────────────────────────────

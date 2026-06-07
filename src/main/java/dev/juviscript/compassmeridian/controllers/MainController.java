@@ -6,6 +6,7 @@ import dev.juviscript.compassmeridian.model.Profile;
 import dev.juviscript.compassmeridian.serial.CompassProtocol;
 import dev.juviscript.compassmeridian.serial.CompassSerial;
 import dev.juviscript.compassmeridian.utils.Logger;
+import dev.juviscript.compassmeridian.utils.ToastManager;
 import dev.juviscript.compassmeridian.utils.UIUtils;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -27,11 +28,12 @@ import java.util.Map;
 public class MainController {
 
     // ── FXML bindings ─────────────────────────────────────
+    @FXML private StackPane rootPane;
     @FXML private StackPane contentArea;
-    @FXML private VBox navDevice;
-    @FXML private VBox navMapping;
-    @FXML private VBox navHelp;
-    @FXML private VBox navAbout;
+    @FXML private HBox navDevice;
+    @FXML private HBox navMapping;
+    @FXML private HBox navHelp;
+    @FXML private HBox navAbout;
     @FXML private ImageView appIcon;
     @FXML private ImageView brandIcon;
 
@@ -40,11 +42,11 @@ public class MainController {
     private CompassProtocol protocol;
     private boolean connected = false;
     private DeviceController deviceController;
+    private ToastManager toast;
 
     private double dragOffsetX;
     private double dragOffsetY;
-
-    private VBox currentNav;
+    private HBox currentNav;
 
     // ── Init ──────────────────────────────────────────────
     @FXML
@@ -71,10 +73,16 @@ public class MainController {
         UIUtils.addHoverFadeChildren(navMapping);
         UIUtils.addHoverFadeChildren(navHelp);
 
+        // Initialize toast manager on root pane
+        toast = new ToastManager(rootPane);
+
         setActiveNav(navDevice);
         loadPage("device-page.fxml");
         autoConnect();
     }
+
+    // ── Toast access ──────────────────────────────────────
+    public ToastManager getToast() { return toast; }
 
     // ── Auto connect ──────────────────────────────────────
     private void autoConnect() {
@@ -108,6 +116,7 @@ public class MainController {
                 deviceController.setProtocol(protocol);
                 deviceController.setConnectedState(true);
             }
+            toast.success("Compass connected");
         });
 
         new Thread(() -> {
@@ -148,6 +157,7 @@ public class MainController {
             if (deviceController != null) {
                 deviceController.setConnectedState(false);
             }
+            toast.error("Compass disconnected");
             Logger.info("ui", "Compass disconnected");
         });
     }
@@ -206,7 +216,7 @@ public class MainController {
         }
     }
 
-    private void setActiveNav(VBox selected) {
+    private void setActiveNav(HBox selected) {
         if (currentNav != null) {
             currentNav.getStyleClass().remove("nav-item-active");
         }
@@ -260,6 +270,7 @@ public class MainController {
                 if (protocol != null) {
                     mappingController.setProtocol(protocol);
                 }
+                mappingController.setToast(toast);
             }
 
             UIUtils.fadeIn(page, 200);

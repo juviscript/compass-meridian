@@ -78,8 +78,8 @@ public class MeridianApp extends Application {
             stage.initStyle(StageStyle.UNDECORATED);
             stage.setTitle("Meridian");
             stage.setScene(scene);
-            stage.setMinWidth(900);
-            stage.setMinHeight(620);
+            stage.setMinWidth(1280);
+            stage.setMinHeight(800);
 
             try {
                 stage.getIcons().add(

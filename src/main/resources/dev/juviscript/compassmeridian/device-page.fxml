@@ -13,16 +13,17 @@
       VBox.vgrow="ALWAYS">
 
     <!-- Hero Card -->
-    <HBox styleClass="card" spacing="24" alignment="CENTER_LEFT"
+    <HBox styleClass="card" spacing="40" alignment="CENTER_LEFT"
           VBox.vgrow="ALWAYS" maxHeight="Infinity">
 
         <!-- Placeholder image — hidden when disconnected -->
         <StackPane fx:id="deviceImageContainer"
                    styleClass="device-image-container"
-                   maxWidth="200" maxHeight="200"
-                   minWidth="200" minHeight="200"
+                   maxWidth="280" maxHeight="280"
+                   minWidth="280" minHeight="280"
                    visible="false" managed="false">
-            <ImageView fx:id="deviceImage" fitWidth="200" fitHeight="200" preserveRatio="true"/>
+            <ImageView fx:id="deviceImage" fitWidth="280" fitHeight="280"
+                       preserveRatio="true"/>
         </StackPane>
 
         <VBox HBox.hgrow="ALWAYS">
@@ -102,70 +103,93 @@
         <VBox styleClass="card" spacing="12"
               HBox.hgrow="ALWAYS" maxWidth="Infinity"
               maxHeight="Infinity" VBox.vgrow="ALWAYS">
-            <Label text="DEVICE INFO" styleClass="card-title"/>
 
-            <GridPane hgap="16" vgap="8">
-                <columnConstraints>
-                    <ColumnConstraints minWidth="120" prefWidth="120"/>
-                    <ColumnConstraints hgrow="ALWAYS"/>
-                </columnConstraints>
+            <!-- Collapsible header -->
+            <HBox alignment="CENTER_LEFT" onMouseClicked="#onToggleDeviceInfo"
+                  style="-fx-cursor: hand;">
+                <Label text="DEVICE INFO" styleClass="card-title"
+                       HBox.hgrow="ALWAYS"/>
+                <Label fx:id="deviceInfoToggle" text="▾" styleClass="card-title"
+                       style="-fx-font-size: 14px;"/>
+            </HBox>
 
-                <Label text="Serial" styleClass="stat-label"
-                       GridPane.rowIndex="0" GridPane.columnIndex="0"/>
-                <Label fx:id="serialLabel" text="—" styleClass="value"
-                       GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+            <!-- Collapsible content -->
+            <VBox fx:id="deviceInfoContent" spacing="8">
+                <GridPane hgap="16" vgap="8">
+                    <columnConstraints>
+                        <ColumnConstraints minWidth="120" prefWidth="120"/>
+                        <ColumnConstraints hgrow="ALWAYS"/>
+                    </columnConstraints>
 
-                <Label text="Device ID" styleClass="stat-label"
-                       GridPane.rowIndex="1" GridPane.columnIndex="0"/>
-                <Label text="compass-rp2040" styleClass="value"
-                       GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+                    <Label text="Serial" styleClass="stat-label"
+                           GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                    <Label fx:id="serialLabel" text="—" styleClass="value"
+                           GridPane.rowIndex="0" GridPane.columnIndex="1"/>
 
-                <Label text="Manufacturer" styleClass="stat-label"
-                       GridPane.rowIndex="2" GridPane.columnIndex="0"/>
-                <Label text="Klutch Gaming" styleClass="value"
-                       GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+                    <Label text="Device ID" styleClass="stat-label"
+                           GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                    <Label text="compass-rp2040" styleClass="value"
+                           GridPane.rowIndex="1" GridPane.columnIndex="1"/>
 
-                <Label text="Build Date" styleClass="stat-label"
-                       GridPane.rowIndex="3" GridPane.columnIndex="0"/>
-                <Label fx:id="buildDateLabel" text="—" styleClass="value"
-                       GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+                    <Label text="Manufacturer" styleClass="stat-label"
+                           GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                    <Label text="Klutch Gaming" styleClass="value"
+                           GridPane.rowIndex="2" GridPane.columnIndex="1"/>
 
-                <Label text="Port" styleClass="stat-label"
-                       GridPane.rowIndex="4" GridPane.columnIndex="0"/>
-                <Label fx:id="portLabel" text="—" styleClass="value"
-                       GridPane.rowIndex="4" GridPane.columnIndex="1"/>
-            </GridPane>
+                    <Label text="Build Date" styleClass="stat-label"
+                           GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+                    <Label fx:id="buildDateLabel" text="—" styleClass="value"
+                           GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+
+                    <Label text="Port" styleClass="stat-label"
+                           GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+                    <Label fx:id="portLabel" text="—" styleClass="value"
+                           GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+                </GridPane>
+            </VBox>
         </VBox>
 
         <!-- Firmware card -->
         <VBox styleClass="card" spacing="12"
               HBox.hgrow="ALWAYS" maxWidth="Infinity"
               maxHeight="Infinity" VBox.vgrow="ALWAYS">
-            <Label text="FIRMWARE" styleClass="card-title"/>
 
-            <GridPane hgap="16" vgap="8">
-                <columnConstraints>
-                    <ColumnConstraints minWidth="120" prefWidth="120"/>
-                    <ColumnConstraints hgrow="ALWAYS"/>
-                </columnConstraints>
+            <!-- Collapsible header -->
+            <HBox alignment="CENTER_LEFT" onMouseClicked="#onToggleFirmware"
+                  style="-fx-cursor: hand;">
+                <Label text="FIRMWARE" styleClass="card-title"
+                       HBox.hgrow="ALWAYS"/>
+                <Label fx:id="firmwareToggle" text="▾" styleClass="card-title"
+                       style="-fx-font-size: 14px;"/>
+            </HBox>
 
-                <Label text="INSTALLED" styleClass="stat-label"
-                       GridPane.rowIndex="0" GridPane.columnIndex="0"/>
-                <Label fx:id="installedVersion" text="—" styleClass="value"
-                       GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+            <!-- Collapsible content -->
+            <VBox fx:id="firmwareContent" spacing="8">
+                <GridPane hgap="16" vgap="8">
+                    <columnConstraints>
+                        <ColumnConstraints minWidth="120" prefWidth="120"/>
+                        <ColumnConstraints hgrow="ALWAYS"/>
+                    </columnConstraints>
 
-                <Label text="HW REV" styleClass="stat-label"
-                       GridPane.rowIndex="1" GridPane.columnIndex="0"/>
-                <Label fx:id="hwRevLabel" text="—" styleClass="value"
-                       GridPane.rowIndex="1" GridPane.columnIndex="1"/>
-            </GridPane>
+                    <Label text="INSTALLED" styleClass="stat-label"
+                           GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                    <Label fx:id="installedVersion" text="—" styleClass="value"
+                           GridPane.rowIndex="0" GridPane.columnIndex="1"/>
 
-            <Region VBox.vgrow="ALWAYS"/>
+                    <Label text="HW REV" styleClass="stat-label"
+                           GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                    <Label fx:id="hwRevLabel" text="—" styleClass="value"
+                           GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+                </GridPane>
 
-            <Button text="Check for Updates"
-                    styleClass="btn-secondary"
-                    style="-fx-padding: 5 12 5 12; -fx-font-size: 10px;"
-                    fx:id="checkUpdatesButton" onAction="#onCheckUpdates" maxWidth="Infinity"/>
+                <Region VBox.vgrow="ALWAYS"/>
+
+                <Button text="Check for Updates"
+                        styleClass="btn-secondary"
+                        style="-fx-padding: 5 12 5 12; -fx-font-size: 10px;"
+                        fx:id="checkUpdatesButton" onAction="#onCheckUpdates"
+                        maxWidth="Infinity"/>
+            </VBox>
         </VBox>
     </HBox>
 </VBox>

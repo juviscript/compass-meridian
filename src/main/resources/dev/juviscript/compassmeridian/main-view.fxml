@@ -4,14 +4,13 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.image.*?>
-<?import javafx.scene.shape.*?>
 
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="dev.juviscript.compassmeridian.controllers.MainController"
             styleClass="root"
-            prefWidth="900"
-            prefHeight="620">
+            prefWidth="1280"
+            prefHeight="800">
 
     <!-- Custom Titlebar -->
     <top>
@@ -36,49 +35,70 @@
 
     <!-- Sidebar -->
     <left>
-        <VBox styleClass="sidebar" prefWidth="125" spacing="4">
+        <VBox styleClass="sidebar" prefWidth="200">
             <VBox styleClass="sidebar-inner" VBox.vgrow="ALWAYS" maxHeight="Infinity">
 
                 <!-- Logo -->
-                <VBox styleClass="sidebar-logo" alignment="CENTER">
-                    <ImageView fx:id="brandIcon" fitWidth="65" fitHeight="65"
+                <VBox styleClass="sidebar-logo" alignment="CENTER" spacing="6">
+                    <ImageView fx:id="brandIcon" fitWidth="80" fitHeight="80"
                                preserveRatio="true"/>
                 </VBox>
 
                 <!-- Nav items -->
-                <VBox fx:id="navDevice" styleClass="nav-item" onMouseClicked="#onNavDevice">
+                <HBox fx:id="navDevice" styleClass="nav-item"
+                      onMouseClicked="#onNavDevice" alignment="CENTER_LEFT"
+                      spacing="15">
+                    <StackPane minWidth="30" prefWidth="30">
                     <Label text="⬡" styleClass="nav-icon"/>
-                    <Label text="DEVICE" styleClass="nav-label"/>
-                </VBox>
+                    </StackPane>
+                    <Label text="DASHBOARD" styleClass="nav-label"/>
+                </HBox>
 
-                <VBox fx:id="navMapping" styleClass="nav-item" onMouseClicked="#onNavMapping">
+                <HBox fx:id="navMapping" styleClass="nav-item"
+                      onMouseClicked="#onNavMapping" alignment="CENTER_LEFT"
+                      spacing="15">
+                    <StackPane minWidth="30" prefWidth="30">
                     <Label text="⌨" styleClass="nav-icon"/>
+                    </StackPane>
+
                     <Label text="MAPPING" styleClass="nav-label"/>
-                </VBox>
+                </HBox>
 
-                <VBox fx:id="navHelp" styleClass="nav-item" onMouseClicked="#onNavHelp">
+                <HBox fx:id="navHelp" styleClass="nav-item"
+                      onMouseClicked="#onNavHelp" alignment="CENTER_LEFT"
+                      spacing="15">
+                    <StackPane minWidth="30" prefWidth="30">
                     <Label text="?" styleClass="nav-icon"/>
-                    <Label text="HELP" styleClass="nav-label"/>
-                </VBox>
+                    </StackPane>
 
-                <!-- Spacer pushes about to bottom -->
+                    <Label text="HELP" styleClass="nav-label"/>
+                </HBox>
+
+                <!-- Spacer -->
                 <Region VBox.vgrow="ALWAYS"/>
 
+                <!-- App Settings -->
                 <!-- About -->
-                <VBox fx:id="navAbout" styleClass="nav-item" onMouseClicked="#onNavAbout"
-                      alignment="CENTER" style="-fx-padding: 8 0 8 0;">
-                    <Label text="ⓘ" styleClass="nav-icon"
-                           style="-fx-font-size: 16px;"/>
-                    <Label text="ABOUT" styleClass="nav-label"/>
-                </VBox>
+                <HBox fx:id="navAbout" styleClass="nav-item"
+                      onMouseClicked="#onNavAbout" alignment="CENTER_LEFT"
+                      spacing="12">
+                    <StackPane minWidth="30" prefWidth="30">
+
+                    <Label text="ⓘ" styleClass="nav-icon"/>
+                    </StackPane>
+
+                    <Label text="About" styleClass="nav-label"/>
+                </HBox>
 
             </VBox>
         </VBox>
     </left>
 
-    <!-- Main content area -->
+    <!-- Main content area — StackPane for toast overlay -->
     <center>
-        <StackPane fx:id="contentArea" styleClass="content-area"/>
+        <StackPane fx:id="rootPane" styleClass="content-area">
+            <StackPane fx:id="contentArea"/>
+        </StackPane>
     </center>
 
 </BorderPane>

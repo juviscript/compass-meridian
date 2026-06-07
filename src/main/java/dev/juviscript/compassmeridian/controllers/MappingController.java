@@ -3,6 +3,7 @@ package dev.juviscript.compassmeridian.controllers;
 import dev.juviscript.compassmeridian.model.KeyMapping;
 import dev.juviscript.compassmeridian.model.Profile;
 import dev.juviscript.compassmeridian.serial.CompassProtocol;
+import dev.juviscript.compassmeridian.utils.ToastManager;
 import dev.juviscript.compassmeridian.utils.UIUtils;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -41,22 +42,19 @@ public class MappingController {
     // ── Profile bindings ──────────────────────────────────
     @FXML private VBox builtinProfilesList;
     @FXML private VBox customProfilesList;
-    @FXML private TextField newProfileNameField;
-    @FXML private Button saveProfileButton;
-    @FXML private Label saveProfileStatus;
     @FXML private Label customCountLabel;
     @FXML private Label noCustomLabel;
     @FXML private Button saveAsProfileButton;
 
     // ── Deadzone slider config ────────────────────────────
-    // Sliders are inverted: left = less sensitive (high deadzone), right = more sensitive (low deadzone)
-    private static final int DZ_MIN      = 50;   // most sensitive
-    private static final int DZ_MAX      = 150;  // least sensitive
-    private static final int DZ_DIAG_MIN = 30;   // most sensitive
-    private static final int DZ_DIAG_MAX = 100;  // least sensitive
+    private static final int DZ_MIN      = 50;
+    private static final int DZ_MAX      = 150;
+    private static final int DZ_DIAG_MIN = 30;
+    private static final int DZ_DIAG_MAX = 100;
 
     // ── State ─────────────────────────────────────────────
     private CompassProtocol protocol;
+    private ToastManager toast;
 
     private static final List<String> KEY_OPTIONS = List.of(
             "w", "a", "s", "d", "i", "j", "k", "l",
@@ -87,8 +85,6 @@ public class MappingController {
         rightCombo.setValue("d");
         clickCombo.setValue("SPACE");
 
-        // Slider listeners — invert slider position to deadzone value
-        // Slider left = high deadzone (less sensitive), right = low deadzone (more sensitive)
         thresholdSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
             int deadzone = sliderToDeadzone(newVal.intValue(), DZ_MIN, DZ_MAX);
             thresholdLabel.setText(String.valueOf(deadzone));
@@ -101,20 +97,14 @@ public class MappingController {
 
         if (saveButton != null)          { UIUtils.addHoverFade(saveButton);          UIUtils.addClickPulse(saveButton); }
         if (resetButton != null)         { UIUtils.addHoverFade(resetButton);         UIUtils.addClickPulse(resetButton); }
-        if (saveProfileButton != null)   { UIUtils.addHoverFade(saveProfileButton);   UIUtils.addClickPulse(saveProfileButton); }
         if (saveAsProfileButton != null) { UIUtils.addHoverFade(saveAsProfileButton); UIUtils.addClickPulse(saveAsProfileButton); }
     }
 
     // ── Slider inversion helpers ──────────────────────────
-
-    // Slider position → deadzone value (inverted)
-    // Slider at min (left) = max deadzone (least sensitive)
-    // Slider at max (right) = min deadzone (most sensitive)
     private int sliderToDeadzone(int sliderValue, int dzMin, int dzMax) {
         return dzMax - sliderValue + dzMin;
     }
 
-    // Deadzone value → slider position (inverted)
     private int deadzoneToSlider(int deadzone, int dzMin, int dzMax) {
         return dzMax - deadzone + dzMin;
     }
@@ -131,8 +121,6 @@ public class MappingController {
         String left  = leftCombo.getValue();
         String right = rightCombo.getValue();
         String click = clickCombo.getValue();
-
-        // Convert slider positions back to deadzone values
         int deadzone         = sliderToDeadzone((int) thresholdSlider.getValue(), DZ_MIN, DZ_MAX);
         int diagonalDeadzone = sliderToDeadzone((int) diagonalSlider.getValue(), DZ_DIAG_MIN, DZ_DIAG_MAX);
 
@@ -148,9 +136,12 @@ public class MappingController {
             boolean saved = protocol.save();
 
             boolean success = ok && saved;
-            Platform.runLater(() ->
-                    showStatus(success ? "Saved successfully" : "Save failed", !success)
-            );
+            Platform.runLater(() -> {
+                if (toast != null) {
+                    if (success) toast.success("Mapping saved successfully");
+                    else toast.error("Failed to save mapping");
+                }
+            });
         }).start();
     }
 
@@ -160,8 +151,12 @@ public class MappingController {
         new Thread(() -> {
             boolean ok = protocol.reset();
             Platform.runLater(() -> {
-                if (ok) applyMapping(new KeyMapping());
-                showStatus(ok ? "Reset to defaults" : "Reset failed", !ok);
+                if (ok) {
+                    applyMapping(new KeyMapping());
+                    if (toast != null) toast.success("Reset to defaults");
+                } else {
+                    if (toast != null) toast.error("Reset failed");
+                }
             });
         }).start();
     }
@@ -169,6 +164,10 @@ public class MappingController {
     @FXML
     private void onSaveAsProfileClicked() {
         if (protocol == null) return;
+        openSaveProfileModal();
+    }
+
+    private void openSaveProfileModal() {
         try {
             FXMLLoader loader = new FXMLLoader(
                     getClass().getResource(
@@ -190,45 +189,17 @@ public class MappingController {
             );
 
             modal.setScene(scene);
-            controller.setup(modal, protocol, getCurrentMapping(), () ->
-                    Platform.runLater(this::loadProfiles)
-            );
+            controller.setup(modal, protocol, getCurrentMapping(), () -> {
+                Platform.runLater(() -> {
+                    loadProfiles();
+                    if (toast != null) toast.success("Profile saved");
+                });
+            });
             modal.show();
 
         } catch (IOException e) {
             System.err.println("[mapping] Failed to open modal: " + e.getMessage());
-            e.printStackTrace();
         }
-    }
-
-    @FXML
-    private void onSaveProfileClicked() {
-        if (newProfileNameField == null || protocol == null) return;
-        String name = newProfileNameField.getText().trim();
-        if (name.isEmpty())     { showStatus("Please enter a profile name", true);       return; }
-        if (name.length() > 32) { showStatus("Name too long (max 32 characters)", true); return; }
-
-        saveProfileButton.setDisable(true);
-        showStatus("Saving...", false);
-
-        new Thread(() -> {
-            boolean ok = protocol.saveProfile(name);
-            Platform.runLater(() -> {
-                if (saveProfileButton != null) saveProfileButton.setDisable(false);
-                if (ok) {
-                    newProfileNameField.clear();
-                    showStatus("Profile saved!", false);
-                    loadProfiles();
-                } else {
-                    showStatus("Failed to save profile", true);
-                }
-            });
-        }).start();
-    }
-
-    @FXML
-    private void onNewProfileKeyPressed(javafx.scene.input.KeyEvent e) {
-        if (e.getCode() == KeyCode.ENTER) onSaveProfileClicked();
     }
 
     // ── Mapping helpers ───────────────────────────────────
@@ -239,7 +210,6 @@ public class MappingController {
         rightCombo.setValue(mapping.getRight());
         clickCombo.setValue(mapping.getClick());
 
-        // Convert deadzone values to inverted slider positions
         int dzSlider     = deadzoneToSlider(mapping.getDeadzone(), DZ_MIN, DZ_MAX);
         int diagDzSlider = deadzoneToSlider(mapping.getDiagonalDeadzone(), DZ_DIAG_MIN, DZ_DIAG_MAX);
 
@@ -298,6 +268,7 @@ public class MappingController {
         row.getStyleClass().add("profile-row");
         if (profile.isActive()) row.getStyleClass().add("profile-row-active");
 
+        // Name + type badge
         HBox nameRow = new HBox(6);
         nameRow.setAlignment(Pos.CENTER_LEFT);
         HBox.setHgrow(nameRow, Priority.ALWAYS);
@@ -312,21 +283,23 @@ public class MappingController {
         nameRow.getChildren().addAll(nameLabel, typeBadge);
         row.getChildren().add(nameRow);
 
+        // Active badge
         if (profile.isActive()) {
             Label activeBadge = new Label("ACTIVE");
             activeBadge.getStyleClass().addAll("badge", "badge-green");
             row.getChildren().add(activeBadge);
         }
 
+        // Set Active button — only when not active
         if (!profile.isActive()) {
-            Button loadBtn = new Button("▶");
-            loadBtn.getStyleClass().addAll("icon-btn", "icon-btn-load");
-            loadBtn.setTooltip(new Tooltip("Load profile"));
-            loadBtn.setOnAction(e -> onLoadProfile(profile));
-            UIUtils.addHoverFade(loadBtn);
-            row.getChildren().add(loadBtn);
+            Button setActiveBtn = new Button("Set Active");
+            setActiveBtn.getStyleClass().add("btn-set-active");
+            setActiveBtn.setOnAction(e -> onLoadProfile(profile));
+            UIUtils.addHoverFade(setActiveBtn);
+            row.getChildren().add(setActiveBtn);
         }
 
+        // Delete button — custom only
         if (!profile.isBuiltin()) {
             Button deleteBtn = new Button("✕");
             deleteBtn.getStyleClass().addAll("icon-btn", "icon-btn-delete");
@@ -343,7 +316,9 @@ public class MappingController {
         new Thread(() -> {
             boolean ok = protocol.loadProfile(profile.getFilename());
             if (!ok) {
-                Platform.runLater(() -> showStatus("Failed to load profile", true));
+                Platform.runLater(() -> {
+                    if (toast != null) toast.error("Failed to load profile");
+                });
                 return;
             }
             try { Thread.sleep(300); }
@@ -355,7 +330,7 @@ public class MappingController {
             Platform.runLater(() -> {
                 renderProfiles(profiles);
                 applyMapping(mapping);
-                showStatus("Loaded: " + profile.getDisplayName(), false);
+                if (toast != null) toast.success("Loaded: " + profile.getDisplayName());
             });
         }).start();
     }
@@ -372,10 +347,10 @@ public class MappingController {
                     boolean ok = protocol.deleteProfile(profile.getFilename());
                     Platform.runLater(() -> {
                         if (ok) {
-                            showStatus("Profile deleted", false);
+                            if (toast != null) toast.success("Profile deleted");
                             loadProfiles();
                         } else {
-                            showStatus("Failed to delete profile", true);
+                            if (toast != null) toast.error("Failed to delete profile");
                         }
                     });
                 }).start();
@@ -383,13 +358,9 @@ public class MappingController {
         });
     }
 
-    // ── Helpers ───────────────────────────────────────────
-    private void showStatus(String message, boolean isError) {
-        if (saveProfileStatus == null) return;
-        saveProfileStatus.setText(message);
-        saveProfileStatus.setStyle(isError
-                ? "-fx-text-fill: #cc0000; -fx-font-size: 10px;"
-                : "-fx-text-fill: #00e676; -fx-font-size: 10px;");
+    // ── Setters ───────────────────────────────────────────
+    public void setToast(ToastManager toast) {
+        this.toast = toast;
     }
 
     public void setProtocol(CompassProtocol protocol) {

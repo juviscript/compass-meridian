@@ -1,27 +1,32 @@
 /* ── Root / Theme Tokens ─────────────────────────────────── */
 .root {
-    bg-primary: #0f1115;
-    bg-card: #151922;
-    bg-card-deep: #10131a;
-    bg-elevated: #0b0d11;
+    bg-primary:      #07070d;
+    bg-card:         #0e0e1a;
+    bg-card-deep:    #090912;
+    bg-elevated:     #050508;
 
-    surface-stat: #11151d;
-    surface-stat-hover: #151b25;
-    surface-control: #242832;
-    surface-hover: #2c323d;
+    surface-stat:       #0c0c18;
+    surface-stat-hover: #10101e;
+    surface-control:    #1a1a2e;
+    surface-hover:      #202038;
 
-    border-muted: #181c24;
-    border-soft: #252b35;
-    border-hover: #384151;
-    border-control: #363c47;
+    border-muted: #12122a;
+    border-soft:  #1e1e3a;
+    border-hover: #3a3a6a;
+    border-control: #2a2a4a;
 
-    text-primary: #f6f7fb;
-    text-secondary: #a8b0bd;
-    text-muted: #646d7a;
+    text-primary:   #f0f0ff;
+    text-secondary: #9090b8;
+    text-muted:     #505078;
 
-    accent-red: #cc0000;
-    accent-red-bright: #ff1717;
-    accent-red-dark: #8f0000;
+    accent:        #6d28ff;
+    accent-bright: #8b5cf6;
+    accent-dark:   #4c1adf;
+    accent-glow:   rgba(109,40,255,0.35);
+    accent-glow-soft: rgba(109,40,255,0.15);
+
+    success: #00e676;
+    error:   #ff4444;
 }
 
 /* ── Montserrat Font Face ─────────────────────────────────── */
@@ -30,62 +35,52 @@
     font-weight: 100;
     src: url("/dev/juviscript/compassmeridian/assets/fonts/Montserrat-Thin.ttf");
 }
-
 @font-face {
     font-family: "Montserrat";
     font-weight: 200;
     src: url("/dev/juviscript/compassmeridian/assets/fonts/Montserrat-ExtraLight.ttf");
 }
-
 @font-face {
     font-family: "Montserrat";
     font-weight: 300;
     src: url("/dev/juviscript/compassmeridian/assets/fonts/Montserrat-Light.ttf");
 }
-
 @font-face {
     font-family: "Montserrat";
     font-weight: 400;
     src: url("/dev/juviscript/compassmeridian/assets/fonts/Montserrat-Regular.ttf");
 }
-
 @font-face {
     font-family: "Montserrat";
     font-weight: 500;
     src: url("/dev/juviscript/compassmeridian/assets/fonts/Montserrat-Medium.ttf");
 }
-
 @font-face {
     font-family: "Montserrat";
     font-weight: 600;
     src: url("/dev/juviscript/compassmeridian/assets/fonts/Montserrat-SemiBold.ttf");
 }
-
 @font-face {
     font-family: "Montserrat";
     font-weight: 700;
     src: url("/dev/juviscript/compassmeridian/assets/fonts/Montserrat-Bold.ttf");
 }
-
 @font-face {
     font-family: "Montserrat";
     font-weight: 800;
     src: url("/dev/juviscript/compassmeridian/assets/fonts/Montserrat-ExtraBold.ttf");
 }
-
 @font-face {
     font-family: "Montserrat";
     font-weight: 900;
     src: url("/dev/juviscript/compassmeridian/assets/fonts/Montserrat-Black.ttf");
 }
-
 @font-face {
     font-family: "Montserrat";
     font-weight: 400;
     font-style: italic;
     src: url("/dev/juviscript/compassmeridian/assets/fonts/Montserrat-Italic.ttf");
 }
-
 @font-face {
     font-family: "Montserrat";
     font-weight: 700;
@@ -96,7 +91,7 @@
 /* ── Titlebar ─────────────────────────────────────────────── */
 .title-bar {
     -fx-background-color: bg-elevated;
-    -fx-pref-height: 36px;
+    -fx-pref-height: 38px;
     -fx-border-color: border-muted;
     -fx-border-width: 0 0 1 0;
     -fx-padding: 0 0 0 16;
@@ -108,11 +103,11 @@
     -fx-font-size: 11px;
     -fx-font-weight: 700;
     -fx-letter-spacing: 3px;
-    -fx-padding: 0 0 0 8;
+    -fx-padding: 0 0 0 10;
 }
 
 .window-controls {
-    -fx-pref-height: 36px;
+    -fx-pref-height: 38px;
 }
 
 .btn-minimize, .btn-maximize, .btn-close {
@@ -120,7 +115,7 @@
     -fx-text-fill: text-muted;
     -fx-font-size: 13px;
     -fx-pref-width: 46px;
-    -fx-pref-height: 36px;
+    -fx-pref-height: 38px;
     -fx-background-radius: 0;
     -fx-cursor: hand;
     -fx-border-width: 0;
@@ -132,105 +127,106 @@
 }
 
 .btn-close:hover {
-    -fx-background-color: accent-red;
+    -fx-background-color: error;
     -fx-text-fill: #ffffff;
 }
 
 /* ── Sidebar ──────────────────────────────────────────────── */
 .sidebar {
-    -fx-background-color: bg-primary;
-    -fx-padding: 16 8 16 16;
+    -fx-background-color: bg-elevated;
+    -fx-padding: 0;
+    -fx-border-color: border-muted;
+    -fx-border-width: 0 1 0 0;
 }
 
 .sidebar-inner {
-    -fx-background-color: bg-card;
-    -fx-background-radius: 14px;
-    -fx-border-radius: 14px;
-    -fx-border-color: border-soft;
-    -fx-border-width: 1px;
-    -fx-padding: 24 0 24 0;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.55), 18, 0, 0, 8);
+    -fx-background-color: transparent;
+    -fx-padding: 0;
 }
 
 .sidebar-logo {
-    -fx-padding: 0 0 24 0;
+    -fx-padding: 24 16 20 16;
+    -fx-border-color: border-muted;
+    -fx-border-width: 0 0 1 0;
 }
 
 .brand-label {
-    -fx-text-fill: accent-red;
+    -fx-text-fill: accent-bright;
     -fx-font-family: "Montserrat";
-    -fx-font-size: 9px;
-    -fx-font-weight: 700;
-    -fx-letter-spacing: 2px;
-    -fx-padding: 8 0 0 0;
+    -fx-font-size: 8px;
+    -fx-font-weight: 800;
+    -fx-letter-spacing: 3px;
+    -fx-padding: 4 0 0 0;
 }
 
 /* ── Nav items ────────────────────────────────────────────── */
 .nav-item {
     -fx-background-color: transparent;
     -fx-cursor: hand;
-    -fx-alignment: CENTER;
-    -fx-padding: 13 0 13 0;
+    -fx-alignment: CENTER_LEFT;
+    -fx-padding: 14 20 14 20;
     -fx-border-color: transparent;
     -fx-border-width: 0 0 0 3;
+    -fx-spacing: 12;
 }
 
 .nav-item:hover {
-    -fx-background-color: linear-gradient(to right, rgba(204,0,0,0.20), rgba(204,0,0,0.04));
+    -fx-background-color: accent-glow-soft;
+    -fx-border-color: accent;
+    -fx-border-width: 0 0 0 3;
 }
 
 .nav-item-active {
-    -fx-background-color: linear-gradient(to right, rgba(204,0,0,0.36), rgba(204,0,0,0.08));
-    -fx-border-color: accent-red;
+    -fx-background-color: linear-gradient(to right, rgba(109,40,255,0.25), rgba(109,40,255,0.05));
+    -fx-border-color: accent;
     -fx-border-width: 0 0 0 3;
-    -fx-effect: dropshadow(gaussian, rgba(204,0,0,0.20), 16, 0, 0, 0);
+    -fx-effect: dropshadow(gaussian, accent-glow, 12, 0, 0, 0);
 }
 
 .nav-icon {
     -fx-text-fill: text-muted;
-    -fx-font-size: 20px;
-    -fx-padding: 0 0 2 0;
+    -fx-font-size: 16px;
 }
 
 .nav-item:hover .nav-icon {
-    -fx-text-fill: text-secondary;
+    -fx-text-fill: accent-bright;
 }
 
 .nav-item-active .nav-icon {
-    -fx-text-fill: accent-red-bright;
+    -fx-text-fill: accent-bright;
 }
 
 .nav-item .nav-label {
     -fx-text-fill: text-muted;
     -fx-font-family: "Montserrat";
-    -fx-font-size: 9px;
-    -fx-font-weight: 800;
+    -fx-font-size: 11px;
+    -fx-font-weight: 700;
     -fx-letter-spacing: 1px;
 }
 
 .nav-item:hover .nav-label {
-    -fx-text-fill: text-secondary;
+    -fx-text-fill: text-primary;
 }
 
 .nav-item-active .nav-label {
-    -fx-text-fill: accent-red-bright;
+    -fx-text-fill: text-primary;
 }
 
 /* ── Content area ─────────────────────────────────────────── */
 .content-area {
     -fx-background-color: bg-primary;
-    -fx-padding: 16 16 16 8;
+    -fx-padding: 24;
 }
 
 /* ── Cards ───────────────────────────────────────────────── */
 .card {
     -fx-background-color: linear-gradient(to bottom right, bg-card, bg-card-deep);
-    -fx-background-radius: 12px;
-    -fx-border-radius: 12px;
+    -fx-background-radius: 14px;
+    -fx-border-radius: 14px;
     -fx-border-color: border-soft;
     -fx-border-width: 1px;
     -fx-padding: 24;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.48), 18, 0, 0, 8);
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.6), 20, 0, 0, 8);
 }
 
 .card:hover {
@@ -238,7 +234,7 @@
 }
 
 .card-title {
-    -fx-text-fill: accent-red-bright;
+    -fx-text-fill: accent-bright;
     -fx-font-family: "Montserrat";
     -fx-font-size: 10px;
     -fx-font-weight: 800;
@@ -255,43 +251,43 @@
 .text-secondary {
     -fx-text-fill: text-secondary;
     -fx-font-family: "Montserrat";
-    -fx-font-size: 11px;
+    -fx-font-size: 12px;
 }
 
 .text-accent {
-    -fx-text-fill: accent-red-bright;
+    -fx-text-fill: accent-bright;
 }
 
 /* ── Buttons ──────────────────────────────────────────────── */
 .btn-primary {
-    -fx-background-color: linear-gradient(to bottom, accent-red-bright, accent-red);
+    -fx-background-color: linear-gradient(to bottom, accent-bright, accent);
     -fx-text-fill: #ffffff;
     -fx-font-family: "Montserrat";
+  -fx-font-size: 12px;
     -fx-font-weight: 800;
-    -fx-font-size: 11px;
     -fx-background-radius: 8px;
-    -fx-padding: 9 18 9 18;
+    -fx-padding: 10 20 10 20;
     -fx-cursor: hand;
-    -fx-border-color: rgba(255,255,255,0.06);
+    -fx-border-color: rgba(255,255,255,0.08);
     -fx-border-radius: 8px;
     -fx-border-width: 1px;
-    -fx-effect: dropshadow(gaussian, rgba(204,0,0,0.24), 12, 0, 0, 3);
+    -fx-effect: dropshadow(gaussian, accent-glow, 14, 0, 0, 3);
 }
 
 .btn-primary:hover {
-    -fx-background-color: linear-gradient(to bottom, #ff1a1a, #d80000);
-    -fx-effect: dropshadow(gaussian, rgba(255,0,0,0.34), 16, 0, 0, 4);
+    -fx-background-color: linear-gradient(to bottom, #9b6fff, #7d35ff);
+    -fx-effect: dropshadow(gaussian, rgba(109,40,255,0.55), 18, 0, 0, 4);
 }
 
 .btn-primary:pressed {
-    -fx-background-color: accent-red-dark;
+    -fx-background-color: accent-dark;
     -fx-translate-y: 1px;
 }
 
 .btn-primary:disabled {
-    -fx-background-color: #20242d;
-    -fx-text-fill: #5c6472;
-    -fx-border-color: #2a303a;
+    -fx-background-color: #1a1a2e;
+    -fx-text-fill: #404060;
+    -fx-border-color: #2a2a4a;
     -fx-opacity: 0.72;
     -fx-effect: none;
 }
@@ -300,88 +296,67 @@
     -fx-background-color: surface-control;
     -fx-text-fill: text-secondary;
     -fx-font-family: "Montserrat";
-    -fx-font-size: 11px;
+      -fx-font-size: 12px;
+        -fx-font-weight: 800;
     -fx-background-radius: 8px;
-    -fx-padding: 9 18 9 18;
+    -fx-padding: 10 20 10 20;
     -fx-cursor: hand;
     -fx-border-color: border-control;
     -fx-border-radius: 8px;
     -fx-border-width: 1px;
-    -fx-font-weight: 800;
 }
 
 .btn-secondary:hover {
     -fx-background-color: surface-hover;
     -fx-text-fill: text-primary;
-    -fx-border-color: border-hover;
+    -fx-border-color: accent;
 }
 
 .btn-secondary:pressed {
-    -fx-background-color: #1b2028;
+    -fx-background-color: #12122a;
     -fx-translate-y: 1px;
-}
-
-.btn-preset {
-    -fx-background-color: transparent;
-    -fx-text-fill: accent-red-bright;
-    -fx-font-family: "Montserrat";
-    -fx-font-size: 11px;
-    -fx-font-weight: 800;
-    -fx-background-radius: 8px;
-    -fx-padding: 9 18 9 18;
-    -fx-border-color: accent-red;
-    -fx-border-radius: 8px;
-    -fx-border-width: 1px;
-    -fx-cursor: hand;
-}
-
-.btn-preset:hover {
-    -fx-background-color: accent-red;
-    -fx-text-fill: #ffffff;
-    -fx-effect: dropshadow(gaussian, rgba(204,0,0,0.24), 14, 0, 0, 3);
 }
 
 /* ── Small button variant ─────────────────────────────────── */
 .btn-primary.btn-sm {
-    -fx-padding: 5 12 5 12;
+    -fx-padding: 6 14 6 14;
     -fx-font-size: 10px;
-    -fx-background-color: linear-gradient(to bottom, accent-red-bright, accent-red);
+    -fx-background-color: linear-gradient(to bottom, accent-bright, accent);
     -fx-text-fill: #ffffff;
     -fx-font-family: "Montserrat";
     -fx-font-weight: 800;
     -fx-background-radius: 6px;
     -fx-border-radius: 6px;
-    -fx-border-color: rgba(255,255,255,0.06);
+    -fx-border-color: rgba(255,255,255,0.08);
     -fx-border-width: 1px;
     -fx-cursor: hand;
-    -fx-effect: dropshadow(gaussian, rgba(204,0,0,0.24), 10, 0, 0, 2);
+    -fx-effect: dropshadow(gaussian, accent-glow, 10, 0, 0, 2);
 }
 
 .btn-primary.btn-sm:hover {
-    -fx-background-color: linear-gradient(to bottom, #ff1a1a, #d80000);
-    -fx-effect: dropshadow(gaussian, rgba(255,0,0,0.34), 14, 0, 0, 3);
+    -fx-background-color: linear-gradient(to bottom, #9b6fff, #7d35ff);
 }
 
 .btn-primary.btn-sm:pressed {
-    -fx-background-color: accent-red-dark;
+    -fx-background-color: accent-dark;
     -fx-translate-y: 1px;
 }
 
 .btn-primary.btn-sm:disabled {
-    -fx-background-color: #20242d;
-    -fx-text-fill: #5c6472;
-    -fx-border-color: #2a303a;
+    -fx-background-color: #1a1a2e;
+    -fx-text-fill: #404060;
+    -fx-border-color: #2a2a4a;
     -fx-opacity: 0.72;
     -fx-effect: none;
 }
 
 .btn-secondary.btn-sm {
-    -fx-padding: 5 12 5 12;
+    -fx-padding: 6 14 6 14;
     -fx-font-size: 10px;
     -fx-background-color: surface-control;
     -fx-text-fill: text-secondary;
     -fx-font-family: "Montserrat";
-    -fx-font-weight: 800;
+    -fx-font-weight: 700;
     -fx-background-radius: 6px;
     -fx-border-color: border-control;
     -fx-border-radius: 6px;
@@ -392,17 +367,65 @@
 .btn-secondary.btn-sm:hover {
     -fx-background-color: surface-hover;
     -fx-text-fill: text-primary;
-    -fx-border-color: border-hover;
+    -fx-border-color: accent;
 }
 
 .btn-secondary.btn-sm:pressed {
-    -fx-background-color: #1b2028;
+    -fx-background-color: #12122a;
     -fx-translate-y: 1px;
+}
+
+/* ── Set Active button ────────────────────────────────────── */
+.btn-set-active {
+    -fx-background-color: transparent;
+    -fx-text-fill: accent-bright;
+    -fx-font-family: "Montserrat";
+    -fx-font-size: 10px;
+    -fx-font-weight: 700;
+    -fx-background-radius: 6px;
+    -fx-padding: 5 12 5 12;
+    -fx-border-color: accent;
+    -fx-border-radius: 6px;
+    -fx-border-width: 1px;
+    -fx-cursor: hand;
+}
+
+.btn-set-active:hover {
+    -fx-background-color: accent;
+    -fx-text-fill: #ffffff;
+    -fx-effect: dropshadow(gaussian, accent-glow, 10, 0, 0, 2);
+}
+
+.btn-set-active:pressed {
+    -fx-background-color: accent-dark;
+    -fx-translate-y: 1px;
+}
+
+/* ── Create profile button ────────────────────────────────── */
+.btn-create-profile {
+    -fx-background-color: transparent;
+    -fx-text-fill: accent-bright;
+    -fx-font-family: "Montserrat";
+    -fx-font-size: 11px;
+    -fx-font-weight: 700;
+    -fx-background-radius: 8px;
+    -fx-padding: 10 20 10 20;
+    -fx-border-color: border-soft;
+    -fx-border-radius: 8px;
+    -fx-border-width: 1px;
+    -fx-border-style: dashed;
+    -fx-cursor: hand;
+}
+
+.btn-create-profile:hover {
+    -fx-background-color: accent-glow-soft;
+    -fx-border-color: accent;
+    -fx-text-fill: #ffffff;
 }
 
 /* ── Badges ───────────────────────────────────────────────── */
 .badge {
-    -fx-background-color: #252a33;
+    -fx-background-color: #14142a;
     -fx-text-fill: text-secondary;
     -fx-font-family: "Montserrat";
     -fx-font-size: 8px;
@@ -412,22 +435,18 @@
     -fx-letter-spacing: 1.5px;
 }
 
-.badge-red {
-    -fx-background-color: rgba(204,0,0,0.18);
-    -fx-text-fill: accent-red-bright;
-    -fx-border-color: rgba(204,0,0,0.24);
+.badge-purple {
+    -fx-background-color: rgba(109,40,255,0.18);
+    -fx-text-fill: accent-bright;
+    -fx-border-color: rgba(109,40,255,0.30);
     -fx-border-radius: 20px;
     -fx-border-width: 1px;
-}
-
-.badge-red .label {
-    -fx-text-fill: accent-red-bright;
 }
 
 .badge-green {
     -fx-background-color: rgba(0,230,118,0.14);
     -fx-text-fill: #00e676;
-    -fx-border-color: rgba(0,230,118,0.20);
+    -fx-border-color: rgba(0,230,118,0.22);
     -fx-border-radius: 20px;
     -fx-border-width: 1px;
 }
@@ -436,26 +455,30 @@
     -fx-text-fill: #00e676;
 }
 
-.badge-yellow {
-    -fx-background-color: rgba(255,214,0,0.16);
-    -fx-text-fill: #ffd600;
-    -fx-border-color: rgba(255,214,0,0.22);
+.badge-red {
+    -fx-background-color: rgba(255,68,68,0.14);
+    -fx-text-fill: #ff4444;
+    -fx-border-color: rgba(255,68,68,0.22);
     -fx-border-radius: 20px;
     -fx-border-width: 1px;
 }
 
+.badge-red .label {
+    -fx-text-fill: #ff4444;
+}
+
 .badge-builtin {
-    -fx-background-color: rgba(74,158,255,0.14);
-    -fx-text-fill: #4a9eff;
-    -fx-border-color: rgba(74,158,255,0.22);
+    -fx-background-color: rgba(109,40,255,0.14);
+    -fx-text-fill: accent-bright;
+    -fx-border-color: rgba(109,40,255,0.22);
     -fx-border-radius: 20px;
     -fx-border-width: 1px;
 }
 
 .badge-custom {
-    -fx-background-color: rgba(168,176,189,0.10);
-    -fx-text-fill: #a8b0bd;
-    -fx-border-color: rgba(168,176,189,0.16);
+    -fx-background-color: rgba(144,144,184,0.10);
+    -fx-text-fill: #9090b8;
+    -fx-border-color: rgba(144,144,184,0.18);
     -fx-border-radius: 20px;
     -fx-border-width: 1px;
 }
@@ -471,6 +494,8 @@
 .combo-box .list-cell {
     -fx-text-fill: text-primary;
     -fx-background-color: surface-control;
+    -fx-font-family: "Montserrat";
+    -fx-font-size: 12px;
 }
 
 .combo-box-popup .list-view {
@@ -483,7 +508,7 @@
 }
 
 .combo-box-popup .list-cell:selected {
-    -fx-background-color: accent-red;
+    -fx-background-color: accent;
     -fx-text-fill: #ffffff;
 }
 
@@ -494,17 +519,17 @@
 
 /* ── Device page ──────────────────────────────────────────── */
 .device-image-container {
-    -fx-background-color: radial-gradient(center 50% 52%, radius 62%,
-        rgba(255,0,0,0.28) 0%,
-        rgba(204,0,0,0.18) 34%,
-        rgba(204,0,0,0.05) 58%,
-        transparent 74%);
-    -fx-background-radius: 120px;
-    -fx-min-width: 200px;
-    -fx-min-height: 200px;
-    -fx-max-width: 200px;
-    -fx-max-height: 200px;
-    -fx-effect: dropshadow(gaussian, rgba(204,0,0,0.18), 32, 0, 0, 0);
+    -fx-background-color: radial-gradient(center 50% 55%, radius 65%,
+        rgba(109,40,255,0.40) 0%,
+        rgba(109,40,255,0.22) 30%,
+        rgba(109,40,255,0.08) 58%,
+        transparent 75%);
+    -fx-background-radius: 160px;
+    -fx-min-width: 280px;
+    -fx-min-height: 280px;
+    -fx-max-width: 280px;
+    -fx-max-height: 280px;
+    -fx-effect: dropshadow(gaussian, rgba(109,40,255,0.28), 50, 0, 0, 0);
 }
 
 .hero-card-header {
@@ -514,12 +539,12 @@
 .device-name {
     -fx-text-fill: text-primary;
     -fx-font-family: "Montserrat";
-    -fx-font-size: 25px;
+    -fx-font-size: 28px;
     -fx-font-weight: 800;
 }
 
 .stats-container {
-    -fx-padding: 26 0 0 0;
+    -fx-padding: 24 0 0 0;
 }
 
 .stat-card {
@@ -528,7 +553,7 @@
     -fx-border-color: border-soft;
     -fx-border-radius: 10px;
     -fx-border-width: 1px;
-    -fx-padding: 17 24 17 24;
+    -fx-padding: 18 24 18 24;
 }
 
 .stat-card:hover {
@@ -539,19 +564,21 @@
 .stat-label {
     -fx-text-fill: text-muted;
     -fx-font-family: "Montserrat";
-    -fx-font-size: 11px;
+    -fx-font-size: 12px;
+    -fx-font-weight: 600;
 }
 
 .value {
     -fx-text-fill: text-primary;
     -fx-font-family: "Montserrat";
-    -fx-font-size: 13px;
+    -fx-font-size: 14px;
+    -fx-font-weight: 600;
 }
 
 .value-lg {
     -fx-text-fill: text-primary;
     -fx-font-family: "Montserrat";
-    -fx-font-size: 20px;
+    -fx-font-size: 22px;
     -fx-font-weight: 800;
 }
 
@@ -559,13 +586,13 @@
 .status-dot-connected {
     -fx-text-fill: #00e676;
     -fx-font-size: 10px;
-    -fx-effect: dropshadow(gaussian, rgba(0,230,118,0.55), 8, 0, 0, 0);
+    -fx-effect: dropshadow(gaussian, rgba(0,230,118,0.60), 8, 0, 0, 0);
 }
 
 .status-dot-disconnected {
-    -fx-text-fill: accent-red-bright;
+    -fx-text-fill: #ff4444;
     -fx-font-size: 10px;
-    -fx-effect: dropshadow(gaussian, rgba(255,0,0,0.45), 8, 0, 0, 0);
+    -fx-effect: dropshadow(gaussian, rgba(255,68,68,0.50), 8, 0, 0, 0);
 }
 
 .status-text {
@@ -575,27 +602,26 @@
 
 /* ── Device name field ────────────────────────────────────── */
 .device-name-field {
-    -fx-background-color: #1f1f1f;
+    -fx-background-color: #0e0e1a;
     -fx-text-fill: #ffffff;
     -fx-font-family: "Montserrat";
-    -fx-font-size: 24px;
+    -fx-font-size: 26px;
     -fx-font-weight: 700;
-    -fx-border-color: #cc0000;
-    -fx-border-radius: 4px;
-    -fx-background-radius: 4px;
-    -fx-padding: 4 8 4 8;
+    -fx-border-color: accent;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+    -fx-padding: 4 10 4 10;
 }
 
 .edit-icon {
-    -fx-text-fill: #444444;
+    -fx-text-fill: #30305a;
     -fx-font-size: 18px;
     -fx-cursor: hand;
-    -fx-padding: 0 0 0 4;
-    -fx-transition: -fx-text-fill 150ms ease;
+    -fx-padding: 0 0 0 6;
 }
 
 .edit-icon:hover {
-    -fx-text-fill: #cc0000;
+    -fx-text-fill: accent-bright;
 }
 
 .edit-icon-confirm {
@@ -609,11 +635,11 @@
 /* ── Profile rows ─────────────────────────────────────────── */
 .profile-row {
     -fx-background-color: surface-stat;
-    -fx-background-radius: 8px;
+    -fx-background-radius: 10px;
     -fx-border-color: border-soft;
-    -fx-border-radius: 8px;
+    -fx-border-radius: 10px;
     -fx-border-width: 1px;
-    -fx-padding: 10 16 10 16;
+    -fx-padding: 12 16 12 16;
 }
 
 .profile-row:hover {
@@ -622,14 +648,15 @@
 }
 
 .profile-row-active {
-    -fx-border-color: accent-red;
+    -fx-border-color: accent;
+    -fx-effect: dropshadow(gaussian, accent-glow-soft, 10, 0, 0, 0);
 }
 
 .profile-name {
     -fx-text-fill: text-primary;
     -fx-font-family: "Montserrat";
     -fx-font-size: 12px;
-    -fx-font-weight: 600;
+    -fx-font-weight: 700;
 }
 
 .profile-meta {
@@ -640,18 +667,18 @@
 
 /* ── D-Pad ────────────────────────────────────────────────── */
 .dpad-center {
-    -fx-text-fill: accent-red;
+    -fx-text-fill: accent-bright;
     -fx-font-size: 28px;
     -fx-font-weight: bold;
-    -fx-padding: 0 8 0 8;
-    -fx-effect: dropshadow(gaussian, rgba(204,0,0,0.4), 10, 0, 0, 0);
+    -fx-padding: 0 10 0 10;
+    -fx-effect: dropshadow(gaussian, accent-glow, 12, 0, 0, 0);
 }
 
 .dpad-combo {
     -fx-background-color: surface-control;
     -fx-border-color: border-control;
-    -fx-border-radius: 6px;
-    -fx-background-radius: 6px;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
     -fx-font-family: "Montserrat";
     -fx-font-weight: 700;
     -fx-font-size: 12px;
@@ -665,11 +692,11 @@
 }
 
 .dpad-combo:focused {
-    -fx-border-color: accent-red;
+    -fx-border-color: accent;
 }
 
 .dpad-arrow {
-    -fx-text-fill: accent-red;
+    -fx-text-fill: accent-bright;
     -fx-font-size: 14px;
     -fx-font-weight: bold;
 }
@@ -678,7 +705,7 @@
     -fx-text-fill: text-muted;
     -fx-font-family: "Montserrat";
     -fx-font-size: 9px;
-    -fx-font-weight: 600;
+    -fx-font-weight: 700;
     -fx-letter-spacing: 1px;
 }
 
@@ -687,12 +714,12 @@
     -fx-background-color: bg-card;
     -fx-border-color: border-soft;
     -fx-border-width: 1px;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.8), 24, 0, 0, 8);
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.85), 28, 0, 0, 10);
 }
 
 .modal-titlebar {
     -fx-background-color: bg-elevated;
-    -fx-pref-height: 36px;
+    -fx-pref-height: 38px;
     -fx-padding: 0 0 0 16;
     -fx-border-color: border-muted;
     -fx-border-width: 0 0 1 0;
@@ -707,7 +734,7 @@
 }
 
 .preview-value {
-    -fx-text-fill: accent-red-bright;
+    -fx-text-fill: accent-bright;
     -fx-font-family: "Montserrat";
     -fx-font-size: 13px;
     -fx-font-weight: 700;
@@ -726,22 +753,13 @@
     -fx-background-radius: 4px;
 }
 
-.icon-btn-load {
-    -fx-text-fill: text-muted;
-}
-
-.icon-btn-load:hover {
-    -fx-text-fill: #00e676;
-    -fx-background-color: rgba(0,230,118,0.10);
-}
-
 .icon-btn-delete {
     -fx-text-fill: text-muted;
 }
 
 .icon-btn-delete:hover {
-    -fx-text-fill: accent-red-bright;
-    -fx-background-color: rgba(204,0,0,0.12);
+    -fx-text-fill: #ff4444;
+    -fx-background-color: rgba(255,68,68,0.12);
 }
 
 /* ── Profile scroll ───────────────────────────────────────── */
@@ -761,7 +779,7 @@
 }
 
 .profile-scroll .scroll-bar:vertical .thumb {
-    -fx-background-color: accent-red;
+    -fx-background-color: accent;
     -fx-background-radius: 3px;
 }
 
@@ -772,4 +790,102 @@
 .profile-scroll .scroll-bar:horizontal {
     -fx-pref-height: 0;
     -fx-opacity: 0;
+}
+
+/* ── Sensitivity sliders ──────────────────────────────────── */
+.sensitivity-slider .track {
+    -fx-background-color: border-soft;
+    -fx-pref-height: 4px;
+    -fx-background-radius: 2px;
+}
+
+.sensitivity-slider .thumb {
+    -fx-background-color: accent-bright;
+    -fx-pref-width: 16px;
+    -fx-pref-height: 16px;
+    -fx-background-radius: 8px;
+    -fx-effect: dropshadow(gaussian, accent-glow, 8, 0, 0, 0);
+}
+
+.sensitivity-slider .thumb:hover {
+    -fx-background-color: #9b6fff;
+    -fx-effect: dropshadow(gaussian, accent-glow, 14, 0, 0, 0);
+}
+
+.sensitivity-slider .colored-track {
+    -fx-background-color: accent;
+    -fx-background-radius: 2px;
+}
+
+/* ── Toast notifications ──────────────────────────────────── */
+.toast {
+    -fx-background-radius: 10px;
+    -fx-border-radius: 10px;
+    -fx-border-width: 1px;
+    -fx-padding: 12 20 12 20;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.6), 20, 0, 0, 6);
+}
+
+.toast-success {
+    -fx-background-color: rgba(0,230,118,0.12);
+    -fx-border-color: rgba(0,230,118,0.30);
+}
+
+.toast-error {
+    -fx-background-color: rgba(255,68,68,0.12);
+    -fx-border-color: rgba(255,68,68,0.30);
+}
+
+.toast-label-success {
+    -fx-text-fill: #00e676;
+    -fx-font-family: "Montserrat";
+    -fx-font-size: 13px; /* was 12px */
+    -fx-font-weight: 700;
+}
+
+.toast-label-error {
+    -fx-text-fill: #ff4444;
+    -fx-font-family: "Montserrat";
+    -fx-font-size: 13px; /* was 12px */
+    -fx-font-weight: 700;
+}
+
+/* ── Text field ───────────────────────────────────────────── */
+.text-field {
+    -fx-background-color: surface-control;
+    -fx-text-fill: text-primary;
+    -fx-font-family: "Montserrat";
+    -fx-font-size: 12px;
+    -fx-border-color: border-control;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+    -fx-padding: 8 12 8 12;
+}
+
+.text-field:focused {
+    -fx-border-color: accent;
+}
+
+.sensitivity-slider .track {
+    -fx-background-color: border-soft;
+    -fx-pref-height: 19px;       /* tall enough to fit the text */
+    -fx-background-radius: 6px;
+}
+
+.sensitivity-slider .colored-track {
+    -fx-background-color: accent;
+    -fx-background-radius: 6px;
+}
+
+.sensitivity-slider .thumb {
+    -fx-background-color: accent-bright;
+    -fx-pref-width: 20px;
+    -fx-pref-height: 20px;       /* taller than track so it sticks out */
+    -fx-background-radius: 6px;  /* rectangular thumb to match tall track */
+    -fx-effect: dropshadow(gaussian, accent-glow, 8, 0, 0, 0);
+}
+
+.sensitivity-slider .thumb:hover {
+    -fx-background-color: #9b6fff;
+    -fx-effect: dropshadow(gaussian, accent-glow, 14, 0, 0, 0);
 }
