@@ -26,14 +26,10 @@
 
             <Region HBox.hgrow="ALWAYS"/>
 
-            <!-- Window controls -->
             <HBox styleClass="window-controls">
-                <Button text="─" styleClass="btn-minimize"
-                        onAction="#onMinimize"/>
-                <Button text="□" styleClass="btn-maximize"
-                        onAction="#onMaximize"/>
-                <Button text="✕" styleClass="btn-close"
-                        onAction="#onClose"/>
+                <Button text="─" styleClass="btn-minimize" onAction="#onMinimize"/>
+                <Button text="□" styleClass="btn-maximize" onAction="#onMaximize"/>
+                <Button text="✕" styleClass="btn-close"    onAction="#onClose"/>
             </HBox>
         </HBox>
     </top>
@@ -60,10 +56,15 @@
                     <Label text="MAPPING" styleClass="nav-label"/>
                 </VBox>
 
-                <!-- Spacer pushes about button to bottom -->
+                <VBox fx:id="navHelp" styleClass="nav-item" onMouseClicked="#onNavHelp">
+                    <Label text="?" styleClass="nav-icon"/>
+                    <Label text="HELP" styleClass="nav-label"/>
+                </VBox>
+
+                <!-- Spacer pushes about to bottom -->
                 <Region VBox.vgrow="ALWAYS"/>
 
-                <!-- About button -->
+                <!-- About -->
                 <VBox fx:id="navAbout" styleClass="nav-item" onMouseClicked="#onNavAbout"
                       alignment="CENTER" style="-fx-padding: 8 0 8 0;">
                     <Label text="ⓘ" styleClass="nav-icon"
@@ -77,9 +78,7 @@
 
     <!-- Main content area -->
     <center>
-        <StackPane fx:id="contentArea" styleClass="content-area">
-            <!-- Pages get swapped in here -->
-        </StackPane>
+        <StackPane fx:id="contentArea" styleClass="content-area"/>
     </center>
 
 </BorderPane>

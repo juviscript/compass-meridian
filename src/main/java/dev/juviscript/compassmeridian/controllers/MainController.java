@@ -30,6 +30,7 @@ public class MainController {
     @FXML private StackPane contentArea;
     @FXML private VBox navDevice;
     @FXML private VBox navMapping;
+    @FXML private VBox navHelp;
     @FXML private VBox navAbout;
     @FXML private ImageView appIcon;
     @FXML private ImageView brandIcon;
@@ -68,6 +69,7 @@ public class MainController {
 
         UIUtils.addHoverFadeChildren(navDevice);
         UIUtils.addHoverFadeChildren(navMapping);
+        UIUtils.addHoverFadeChildren(navHelp);
 
         setActiveNav(navDevice);
         loadPage("device-page.fxml");
@@ -171,6 +173,7 @@ public class MainController {
     // ── Navigation ────────────────────────────────────────
     @FXML private void onNavDevice()  { setActiveNav(navDevice);  loadPage("device-page.fxml"); }
     @FXML private void onNavMapping() { setActiveNav(navMapping); loadPage("mapping-page.fxml"); }
+    @FXML private void onNavHelp()    { setActiveNav(navHelp);    loadPage("help-page.fxml"); }
 
     @FXML
     private void onNavAbout() {

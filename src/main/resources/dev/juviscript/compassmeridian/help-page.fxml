@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="dev.juviscript.compassmeridian.controllers.HelpController"
+      spacing="16"
+      maxHeight="Infinity"
+      VBox.vgrow="ALWAYS">
+
+    <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS"
+                styleClass="profile-scroll">
+        <VBox spacing="16" style="-fx-padding: 0 4 0 0;">
+
+            <!-- Getting Started -->
+            <VBox styleClass="card" spacing="12">
+                <Label text="GETTING STARTED" styleClass="card-title"/>
+
+                <VBox spacing="6">
+                    <Label text="1 — Plug in your Compass via USB"
+                           styleClass="text-secondary"
+                           style="-fx-font-size: 12px;"/>
+                    <Label text="2 — Meridian will auto-detect and connect"
+                           styleClass="text-secondary"
+                           style="-fx-font-size: 12px;"/>
+                    <Label text="3 — Navigate to Mapping to configure your keys"
+                           styleClass="text-secondary"
+                           style="-fx-font-size: 12px;"/>
+                    <Label text="4 — Click Apply to save changes to the device"
+                           styleClass="text-secondary"
+                           style="-fx-font-size: 12px;"/>
+                </VBox>
+            </VBox>
+
+            <!-- Key Mapping -->
+            <VBox styleClass="card" spacing="12">
+                <Label text="KEY MAPPING" styleClass="card-title"/>
+                <Label styleClass="text-secondary"
+                       style="-fx-font-size: 12px; -fx-wrap-text: true;"
+                       text="The Mapping page lets you assign any keyboard key to each direction on the Compass joystick, as well as the click button. Changes are sent to the device when you click Apply and saved to flash memory — your mapping persists even when unplugged."/>
+            </VBox>
+
+            <!-- Deadzone -->
+            <VBox styleClass="card" spacing="12">
+                <Label text="DEADZONE" styleClass="card-title"/>
+                <Label styleClass="text-secondary"
+                       style="-fx-font-size: 12px; -fx-wrap-text: true;"
+                       text="The deadzone controls how far you need to push the joystick before a keypress registers. Slide toward More Sensitive for quicker response, or Less Sensitive if you're getting accidental inputs. Diagonal deadzone controls how far the secondary axis needs to move when you're already pushing in one direction."/>
+            </VBox>
+
+            <!-- Profiles -->
+            <VBox styleClass="card" spacing="12">
+                <Label text="PROFILES" styleClass="card-title"/>
+                <Label styleClass="text-secondary"
+                       style="-fx-font-size: 12px; -fx-wrap-text: true;"
+                       text="Profiles let you save and switch between different key mappings. Built-in profiles (WASD, Arrow Keys, IJKL) cannot be deleted. You can create up to 10 custom profiles. Loading a profile applies its mapping and deadzone settings immediately to the device."/>
+            </VBox>
+
+            <!-- Troubleshooting -->
+            <VBox styleClass="card" spacing="12">
+                <Label text="TROUBLESHOOTING" styleClass="card-title"/>
+
+                <VBox spacing="10">
+                    <VBox spacing="2">
+                        <Label text="Compass not detected"
+                               styleClass="value"
+                               style="-fx-font-size: 12px;"/>
+                        <Label styleClass="text-secondary"
+                               style="-fx-font-size: 11px; -fx-wrap-text: true;"
+                               text="Try unplugging and replugging the USB cable. Make sure no other app is using the serial port. Meridian will auto-reconnect within a few seconds."/>
+                    </VBox>
+
+                    <VBox spacing="2">
+                        <Label text="Keys not registering in game"
+                               styleClass="value"
+                               style="-fx-font-size: 12px;"/>
+                        <Label styleClass="text-secondary"
+                               style="-fx-font-size: 11px; -fx-wrap-text: true;"
+                               text="Make sure you clicked Apply after making changes. Try lowering the deadzone value (slide toward More Sensitive). Some games require the Compass to be plugged in before launching."/>
+                    </VBox>
+
+                    <VBox spacing="2">
+                        <Label text="Diagonals not registering"
+                               styleClass="value"
+                               style="-fx-font-size: 12px;"/>
+                        <Label styleClass="text-secondary"
+                               style="-fx-font-size: 11px; -fx-wrap-text: true;"
+                               text="Lower the Diagonal deadzone slider toward More Sensitive. The diagonal deadzone controls how far the secondary axis needs to move when you're already pushing in a direction."/>
+                    </VBox>
+
+                    <VBox spacing="2">
+                        <Label text="Mapping resets after unplugging"
+                               styleClass="value"
+                               style="-fx-font-size: 12px;"/>
+                        <Label styleClass="text-secondary"
+                               style="-fx-font-size: 11px; -fx-wrap-text: true;"
+                               text="Make sure you click Apply before unplugging. Your mapping is saved to the device's flash memory and should persist across power cycles."/>
+                    </VBox>
+                </VBox>
+
+                <!-- Open log folder button -->
+                <Separator/>
+                <VBox spacing="6">
+                    <Label text="Still having trouble? Check the debug log:"
+                           styleClass="stat-label"
+                           style="-fx-font-size: 11px;"/>
+                    <HBox spacing="8" alignment="CENTER_LEFT">
+                        <Label fx:id="logPathLabel"
+                               styleClass="text-secondary"
+                               style="-fx-font-size: 10px; -fx-font-family: monospace;"/>
+                        <Button text="Open Log Folder"
+                                fx:id="openLogButton"
+                                styleClass="btn-secondary"
+                                onAction="#onOpenLogFolder"
+                                style="-fx-padding: 5 12 5 12; -fx-font-size: 10px;"/>
+                    </HBox>
+                </VBox>
+            </VBox>
+
+            <!-- Resources -->
+            <VBox styleClass="card" spacing="12">
+                <Label text="RESOURCES" styleClass="card-title"/>
+
+                <VBox spacing="8">
+                    <Button text="⬡  Open Documentation"
+                            styleClass="btn-secondary"
+                            onAction="#onOpenDocs"
+                            maxWidth="Infinity"
+                            style="-fx-padding: 9 18 9 18;"/>
+                    <Button text="✉  Contact Support"
+                            styleClass="btn-secondary"
+                            onAction="#onContactSupport"
+                            maxWidth="Infinity"
+                            style="-fx-padding: 9 18 9 18;"/>
+                    <Button text="⌥  View Source Code on GitHub"
+                            styleClass="btn-secondary"
+                            onAction="#onOpenGitHub"
+                            maxWidth="Infinity"
+                            style="-fx-padding: 9 18 9 18;"/>
+                </VBox>
+
+                <Label text="Meridian is open source. You can inspect the code, report issues, and suggest features on GitHub."
+                       styleClass="text-secondary"
+                       style="-fx-font-size: 10px; -fx-wrap-text: true; -fx-text-fill: #646d7a;"/>
+            </VBox>
+
+        </VBox>
+    </ScrollPane>
+
+</VBox>
